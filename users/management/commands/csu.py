@@ -5,6 +5,7 @@ from users.models import User
 
 load_dotenv()
 
+
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
@@ -13,7 +14,7 @@ class Command(BaseCommand):
             email=os.getenv("EMAIL_HOST_USER"),
             first_name="Владимир",
             last_name="Сулым",
-            middle_name='Евгеньевич',
+            middle_name="Евгеньевич",
             phone="+7-985-123-45-67",
             is_superuser=True,
             is_active=True,
@@ -21,6 +22,4 @@ class Command(BaseCommand):
         )
         user.set_password(os.getenv("CSU_PASS"))
         user.save()
-        self.stdout.write(
-            self.style.SUCCESS(f"Администратор успешно создан: {user.email}")
-        )
+        self.stdout.write(self.style.SUCCESS(f"Администратор успешно создан: {user.email}"))

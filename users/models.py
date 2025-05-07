@@ -9,19 +9,29 @@ GENDER_CHOICES = (
     ("F", "Женский"),
 )
 
+CATEGORY_CHOICES = (
+    ("none", "Нет категории"),
+    ("second", "Вторая категория"),
+    ("first", "Первая категория"),
+    ("highest", "Высшая категория"),
+)
+
+
 def validate_phone_number(value):
     try:
         phone_number = phonenumbers.parse(value)
         if not phonenumbers.is_valid_number(phone_number):
-            raise ValidationError('Неверный формат номера телефона')
+            raise ValidationError("Неверный формат номера телефона")
     except phonenumbers.phonenumberutil.NumberParseException:
-        raise ValidationError('Неверный формат номера телефона')
+        raise ValidationError("Неверный формат номера телефона")
+
 
 class User(AbstractUser):
     """
     Расширенная модель пользователя, включающая дополнительные поля для
     хранения персональной информации пациентов и сотрудников клиники
     """
+
     username = None
     email = models.EmailField(
         unique=True, verbose_name="Электронная почта", help_text="Адрес электронной почты пользователя"
@@ -32,7 +42,7 @@ class User(AbstractUser):
         verbose_name="Телефон",
         help_text="Номер телефона пользователя в международном формате (например, +79991234567)",
         null=True,
-        blank=True
+        blank=True,
     )
     middle_name = models.CharField(
         max_length=150, verbose_name="Отчество", help_text="Отчество пользователя", null=True, blank=True
@@ -64,7 +74,7 @@ class User(AbstractUser):
             "email",
         ]
         indexes = [
-            models.Index(fields=['email']),
+            models.Index(fields=["email"]),
         ]
 
     USERNAME_FIELD = "email"
@@ -78,8 +88,9 @@ class Department(models.Model):
     """
     Модель отделения медицинской клиники
     """
-    name = models.CharField(max_length=100, verbose_name="Название отделения")
-    description = models.TextField(verbose_name="Описание", blank=True)
+
+    name = models.CharField(max_length=100, verbose_name="Название отделения", help_text="Название отделения клиники")
+    description = models.TextField(verbose_name="Описание", blank=True, help_text="Подробное описание отделения")
 
     class Meta:
         verbose_name = "Отделение"
@@ -96,8 +107,11 @@ class Specialization(models.Model):
     """
     Модель специализации врача
     """
-    name = models.CharField(max_length=100, verbose_name="Название специализации")
-    description = models.TextField(verbose_name="Описание", blank=True)
+
+    name = models.CharField(
+        max_length=100, verbose_name="Название специализации", help_text="Наименование врачебной специализации"
+    )
+    description = models.TextField(verbose_name="Описание", blank=True, help_text="Подробное описание специализации")
 
     class Meta:
         verbose_name = "Специализация"
@@ -106,6 +120,57 @@ class Specialization(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class PatientQuestionnaire(models.Model):
+    """
+    Модель анкеты пациента, содержащая медицинскую информацию
+    """
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    chronic_diseases = models.TextField(
+        verbose_name="Хронические заболевания",
+        help_text="Описание имеющихся хронических заболеваний",
+        blank=True,
+    )
+    allergies = models.TextField(
+        verbose_name="Аллергии и реакции",
+        help_text="Информация об аллергиях и возможных реакциях на препараты",
+        blank=True,
+    )
+    hereditary_diseases = models.TextField(
+        verbose_name="Наследственные заболевания",
+        help_text="Информация о предрасположенности к наследственным заболеваниям",
+        blank=True,
+    )
+    treatment_preferences = models.TextField(
+        verbose_name="Предпочтения в лечении",
+        help_text="Предпочитаемые методы лечения",
+        blank=True,
+    )
+    bad_habits = models.TextField(
+        verbose_name="Вредные привычки",
+        help_text="Описание имеющихся вредных привычек",
+        blank=True,
+    )
+    lifestyle = models.TextField(
+        verbose_name="Образ жизни",
+        help_text="Описание образа жизни (питание, физическая активность и т.д.)",
+        blank=True,
+    )
+    medications = models.TextField(
+        verbose_name="Принимаемые препараты",
+        help_text="Информация о принимаемых лекарственных препаратах",
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Анкета пациента"
+        verbose_name_plural = "Анкеты пациентов"
+        ordering = ["user__last_name", "user__first_name"]
+
+    def __str__(self):
+        return f"Анкета пациента: {self.user.last_name} {self.user.first_name}"
 
 
 class Doctor(models.Model):
@@ -119,25 +184,39 @@ class Doctor(models.Model):
         ("doctor", "Доктор медицинских наук"),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="Отделение")
-    specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, verbose_name="Специализация")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, verbose_name="Пользователь", help_text="Связанный пользователь системы"
+    )
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, verbose_name="Отделение", help_text="Отделение, в котором работает врач"
+    )
+    specialization = models.ForeignKey(
+        Specialization, on_delete=models.PROTECT, verbose_name="Специализация", help_text="Специализация врача"
+    )
     experience = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        verbose_name="Стаж работы (лет)"
+        validators=[MinValueValidator(0)], verbose_name="Стаж работы (лет)", help_text="Опыт работы врача в годах"
     )
     rating = models.DecimalField(
         max_digits=3,
         decimal_places=2,
         validators=[MinValueValidator(0), MaxValueValidator(5)],
         verbose_name="Рейтинг",
-        default=0
+        default=0,
+        help_text="Рейтинг врача по отзывам пациентов (от 0 до 5)",
     )
     academic_degree = models.CharField(
         max_length=20,
         choices=ACADEMIC_DEGREE_CHOICES,
         default="none",
-        verbose_name="Ученая степень"
+        verbose_name="Ученая степень",
+        help_text="Ученая степень врача",
+    )
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        verbose_name="Категория",
+        default="none",
+        help_text="Квалификационная категория врача",
     )
 
     class Meta:
@@ -147,8 +226,8 @@ class Doctor(models.Model):
             "user__last_name",
             "user__first_name",
         ]
-        unique_together = ['user', 'department']
-        
+        unique_together = ["user", "department"]
+
     def clean(self):
         super().clean()
         if self.experience > 60:
