@@ -14,7 +14,16 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ("patient", "doctor", "service", "appointment_date", "appointment_time", "status", "cost")
+    list_display = (
+        "patient",
+        "doctor",
+        "service",
+        "appointment_date",
+        "appointment_time",
+        "status",
+        "cost",
+        "payment_status",
+    )
     list_filter = ("status", "appointment_date", "doctor")
     search_fields = ("patient__email", "doctor__last_name", "service__name")
     ordering = ("-date", "appointment_date", "appointment_time")

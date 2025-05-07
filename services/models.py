@@ -43,20 +43,31 @@ class Service(models.Model):
     Модель медицинской услуги, оказываемой в клинике
     """
 
-    doctors = models.ManyToManyField(Doctor, verbose_name="Врачи", help_text="Врачи, оказывающие данную услугу",
-                                     blank=True, related_name="services")
-    name = models.CharField(max_length=200, verbose_name="Название услуги", help_text="Наименование медицинской услуги")
-    department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, verbose_name="Отделение",
-        help_text="Отделение, к которому относится услуга", related_name="services"
+    doctors = models.ManyToManyField(
+        Doctor, verbose_name="Врачи", help_text="Врачи, оказывающие данную услугу", blank=True, related_name="services"
     )
-    duration = models.DurationField(verbose_name="Длительность",
-                                    help_text="Продолжительность оказания услуги (должна быть кратна 30 минутам), заносится в секундах")
-    number_of_slots = models.IntegerField(verbose_name="Количество слотов",
-                                          help_text="Количество временных слотов, необходимых для услуги",
-                                          editable=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость",
-                                help_text="Базовая стоимость услуги")
+    name = models.CharField(
+        max_length=200, verbose_name="Название услуги", help_text="Наименование медицинской услуги"
+    )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE,
+        verbose_name="Отделение",
+        help_text="Отделение, к которому относится услуга",
+        related_name="services",
+    )
+    duration = models.DurationField(
+        verbose_name="Длительность",
+        help_text="Продолжительность оказания услуги (должна быть кратна 30 минутам), заносится в секундах",
+    )
+    number_of_slots = models.IntegerField(
+        verbose_name="Количество слотов",
+        help_text="Количество временных слотов, необходимых для услуги",
+        editable=False,
+    )
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name="Стоимость", help_text="Базовая стоимость услуги"
+    )
     description = models.TextField(verbose_name="Описание", help_text="Подробное описание услуги", blank=True)
     is_active = models.BooleanField(verbose_name="Активность", help_text="Доступность услуги для записи", default=True)
 
@@ -98,11 +109,17 @@ class Schedule(models.Model):
         (2, "2 Смена"),
     )
 
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Врач",
-                               help_text="Врач, для которого составляется расписание", related_name="schedules")
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE,
+        verbose_name="Врач",
+        help_text="Врач, для которого составляется расписание",
+        related_name="schedules",
+    )
     date = models.DateField(verbose_name="Дата", help_text="Дата рабочего дня")
-    working_shift = models.IntegerField(choices=SHIFT_CHOICES, verbose_name="Рабочая смена",
-                                        help_text="Номер рабочей смены (1 или 2)")
+    working_shift = models.IntegerField(
+        choices=SHIFT_CHOICES, verbose_name="Рабочая смена", help_text="Номер рабочей смены (1 или 2)"
+    )
 
     class Meta:
         verbose_name = "Расписание"
@@ -141,13 +158,22 @@ class Slot(models.Model):
         ("free", "free"),
     )
 
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, verbose_name="Расписание",
-                                 help_text="Расписание, к которому относится слот", related_name="slots")
+    schedule = models.ForeignKey(
+        Schedule,
+        on_delete=models.CASCADE,
+        verbose_name="Расписание",
+        help_text="Расписание, к которому относится слот",
+        related_name="slots",
+    )
     date = models.DateField(verbose_name="Дата", help_text="Дата слота")
-    number = models.IntegerField(choices=NUMBER_SLOT, verbose_name="Слот",
-                                 help_text="Порядковый номер временного слота")
-    status = models.CharField(choices=STATUS_SLOT, verbose_name="Статус слота",
-                              help_text="Текущий статус слота (свободен/занят/начало приема)")
+    number = models.IntegerField(
+        choices=NUMBER_SLOT, verbose_name="Слот", help_text="Порядковый номер временного слота"
+    )
+    status = models.CharField(
+        choices=STATUS_SLOT,
+        verbose_name="Статус слота",
+        help_text="Текущий статус слота (свободен/занят/начало приема)",
+    )
     previous_slot = models.OneToOneField(
         "self",
         on_delete=models.SET_NULL,
@@ -156,7 +182,7 @@ class Slot(models.Model):
         related_name="next_slot",
         default=None,
         editable=False,
-        help_text="Предыдущий временной слот"
+        help_text="Предыдущий временной слот",
     )
 
     class Meta:
@@ -183,11 +209,19 @@ class CategoryCoefficient(models.Model):
     """
 
     category = models.CharField(
-        max_length=20, choices=CATEGORY_CHOICES, unique=True, verbose_name="Категория", help_text="Категория врача",
-        default="none"
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        unique=True,
+        verbose_name="Категория",
+        help_text="Категория врача",
+        default="none",
     )
-    coefficient = models.DecimalField(max_digits=3, decimal_places=2, verbose_name="Коэффициент",
-                                      help_text="Коэффициент стоимости услуг для данной категории")
+    coefficient = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        verbose_name="Коэффициент",
+        help_text="Коэффициент стоимости услуг для данной категории",
+    )
 
     class Meta:
         verbose_name = "Коэффициент категории"
@@ -214,22 +248,33 @@ class DiagnosticResult(models.Model):
     )
 
     appointment = models.OneToOneField(
-        "Appointment", on_delete=models.CASCADE, verbose_name="Запись на прием", help_text="Связанная запись на прием",
-        related_name="diagnostic_result"
+        "Appointment",
+        on_delete=models.CASCADE,
+        verbose_name="Запись на прием",
+        help_text="Связанная запись на прием",
+        related_name="diagnostic_result",
     )
     doctor = models.ForeignKey(
-        Doctor, on_delete=models.PROTECT, verbose_name="Врач", help_text="Врач, проводивший диагностику",
-        related_name="diagnostic_results"
+        Doctor,
+        on_delete=models.PROTECT,
+        verbose_name="Врач",
+        help_text="Врач, проводивший диагностику",
+        related_name="diagnostic_results",
     )
     patient = models.ForeignKey(
-        User, on_delete=models.PROTECT, verbose_name="Пациент", help_text="Пациент, прошедший диагностику",
-        related_name="diagnostic_results"
+        User,
+        on_delete=models.PROTECT,
+        verbose_name="Пациент",
+        help_text="Пациент, прошедший диагностику",
+        related_name="diagnostic_results",
     )
     diagnosis = models.TextField(verbose_name="Диагноз", help_text="Поставленный диагноз", null=True, blank=True)
-    recommendations = models.TextField(verbose_name="Рекомендации", help_text="Рекомендации по лечению", null=True,
-                                       blank=True)
-    medications = models.TextField(verbose_name="Назначенные лекарства", help_text="Список назначенных лекарств",
-                                   null=True, blank=True)
+    recommendations = models.TextField(
+        verbose_name="Рекомендации", help_text="Рекомендации по лечению", null=True, blank=True
+    )
+    medications = models.TextField(
+        verbose_name="Назначенные лекарства", help_text="Список назначенных лекарств", null=True, blank=True
+    )
     attachments = models.FileField(
         upload_to=get_upload_path,
         validators=[FileExtensionValidator(allowed_extensions=["pdf", "jpg", "jpeg", "png"])],
@@ -238,11 +283,19 @@ class DiagnosticResult(models.Model):
         null=True,
         blank=True,
     )
-    status = models.CharField(max_length=20, choices=DIAGNOSTIC_STATUS, default="pending", verbose_name="Статус",
-                              help_text="Текущий статус диагностического результата")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", help_text="Дата создания записи")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления",
-                                      help_text="Дата последнего обновления")
+    status = models.CharField(
+        max_length=20,
+        choices=DIAGNOSTIC_STATUS,
+        default="pending",
+        verbose_name="Статус",
+        help_text="Текущий статус диагностического результата",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Дата создания", help_text="Дата создания записи"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Дата обновления", help_text="Дата последнего обновления"
+    )
 
     class Meta:
         verbose_name = "Результат диагностики"
@@ -281,30 +334,61 @@ class Appointment(models.Model):
         ("cancelled", "Отменен"),
     )
 
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пациент",
-                                help_text="Пациент, записанный на прием", related_name="appointments")
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Врач",
-                               help_text="Врач, к которому осуществляется запись", related_name="appointments")
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга",
-                                help_text="Выбранная медицинская услуга", related_name="appointments")
+    patient = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пациент",
+        help_text="Пациент, записанный на прием",
+        related_name="appointments",
+    )
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE,
+        verbose_name="Врач",
+        help_text="Врач, к которому осуществляется запись",
+        related_name="appointments",
+    )
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        verbose_name="Услуга",
+        help_text="Выбранная медицинская услуга",
+        related_name="appointments",
+    )
     slot = models.OneToOneField(
-        Slot, on_delete=models.PROTECT, verbose_name="Слот", help_text="Временной слот записи",
-        related_name="appointment", null=True, editable=False
+        Slot,
+        on_delete=models.PROTECT,
+        verbose_name="Слот",
+        help_text="Временной слот записи",
+        related_name="appointment",
+        null=True,
+        editable=False,
     )
     appointment_date = models.DateField(verbose_name="Дата приема", help_text="Дата планируемого приема")
     appointment_time = models.TimeField(verbose_name="Время приема", help_text="Время начала приема")
     date = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", help_text="Дата создания записи")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="scheduled", verbose_name="Статус",
-                              help_text="Текущий статус записи")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="scheduled",
+        verbose_name="Статус",
+        help_text="Текущий статус записи",
+    )
     notes = models.TextField(verbose_name="Примечания", help_text="Дополнительные заметки к записи", blank=True)
-    cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость",
-                               help_text="Итоговая стоимость услуги с учетом категории врача", editable=False,
-                               default=0)
+    cost = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Стоимость",
+        help_text="Итоговая стоимость услуги с учетом категории врача",
+        editable=False,
+        default=0,
+    )
+    payment_status = models.BooleanField(default=False, verbose_name="Оплата", help_text="Статус оплаты приема")
 
     class Meta:
         verbose_name = "Запись на прием"
         verbose_name_plural = "Записи на прием"
-        ordering = ["-date", "appointment_date", "appointment_time"]
+        ordering = ["-date", "appointment_date", "appointment_time", "payment_status"]
 
     def __str__(self):
         return f"{self.patient} к {self.doctor} на {self.appointment_date} {self.appointment_time}"
