@@ -89,8 +89,8 @@ class Department(models.Model):
     Модель отделения медицинской клиники
     """
 
-    name = models.CharField(max_length=100, verbose_name="Название отделения")
-    description = models.TextField(verbose_name="Описание", blank=True)
+    name = models.CharField(max_length=100, verbose_name="Название отделения", help_text="Название отделения клиники")
+    description = models.TextField(verbose_name="Описание", blank=True, help_text="Подробное описание отделения")
 
     class Meta:
         verbose_name = "Отделение"
@@ -108,8 +108,9 @@ class Specialization(models.Model):
     Модель специализации врача
     """
 
-    name = models.CharField(max_length=100, verbose_name="Название специализации")
-    description = models.TextField(verbose_name="Описание", blank=True)
+    name = models.CharField(max_length=100, verbose_name="Название специализации",
+                            help_text="Наименование врачебной специализации")
+    description = models.TextField(verbose_name="Описание", blank=True, help_text="Подробное описание специализации")
 
     class Meta:
         verbose_name = "Специализация"
@@ -182,21 +183,28 @@ class Doctor(models.Model):
         ("doctor", "Доктор медицинских наук"),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="Отделение")
-    specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, verbose_name="Специализация")
-    experience = models.PositiveIntegerField(validators=[MinValueValidator(0)], verbose_name="Стаж работы (лет)")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь",
+                                help_text="Связанный пользователь системы")
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="Отделение",
+                                   help_text="Отделение, в котором работает врач")
+    specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, verbose_name="Специализация",
+                                       help_text="Специализация врача")
+    experience = models.PositiveIntegerField(validators=[MinValueValidator(0)], verbose_name="Стаж работы (лет)",
+                                             help_text="Опыт работы врача в годах")
     rating = models.DecimalField(
         max_digits=3,
         decimal_places=2,
         validators=[MinValueValidator(0), MaxValueValidator(5)],
         verbose_name="Рейтинг",
         default=0,
+        help_text="Рейтинг врача по отзывам пациентов (от 0 до 5)"
     )
     academic_degree = models.CharField(
-        max_length=20, choices=ACADEMIC_DEGREE_CHOICES, default="none", verbose_name="Ученая степень"
+        max_length=20, choices=ACADEMIC_DEGREE_CHOICES, default="none", verbose_name="Ученая степень",
+        help_text="Ученая степень врача"
     )
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name="Категория", default="none")
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name="Категория", default="none",
+                                help_text="Квалификационная категория врача")
 
     class Meta:
         verbose_name = "Врач"
