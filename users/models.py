@@ -9,6 +9,13 @@ GENDER_CHOICES = (
     ("F", "Женский"),
 )
 
+CATEGORY_CHOICES = (
+    ('none', 'Нет категории'),
+    ("second", "Вторая категория"),
+    ("first", "Первая категория"),
+    ("highest", "Высшая категория"),
+)
+
 def validate_phone_number(value):
     try:
         phone_number = phonenumbers.parse(value)
@@ -139,6 +146,12 @@ class Doctor(models.Model):
         default="none",
         verbose_name="Ученая степень"
     )
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        verbose_name="Категория",
+        default='none'
+    )
 
     class Meta:
         verbose_name = "Врач"
@@ -148,7 +161,7 @@ class Doctor(models.Model):
             "user__first_name",
         ]
         unique_together = ['user', 'department']
-        
+
     def clean(self):
         super().clean()
         if self.experience > 60:

@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('user', 'specialization', 'department', 'experience')
+    list_display = ('user', 'specialization', 'department', 'experience', 'category')
     search_fields = ('user__email', 'user__first_name', 'user__last_name')
     list_filter = ('specialization', 'department')
     ordering = ('user__last_name', 'user__first_name', 'user__middle_name')

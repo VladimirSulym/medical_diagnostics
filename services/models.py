@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from users.models import Department, Doctor, User
+from users.models import Department, Doctor, User, CATEGORY_CHOICES
 
 
 NUMBER_SLOT = (
@@ -39,8 +39,9 @@ class Service(models.Model):
     """
     Модель медицинской услуги, оказываемой в клинике 
     """
+    doctors = models.ManyToManyField(Doctor, verbose_name="Врачи", blank=True, related_name='services')
     name = models.CharField(max_length=200, verbose_name="Название услуги")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="Отделение")
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name="Отделение", related_name='services')
     duration = models.DurationField(verbose_name="Длительность")
     number_of_slots = models.IntegerField(verbose_name="Количество слотов", editable=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость")
@@ -155,6 +156,22 @@ class Slot(models.Model):
         super().save(*args, **kwargs)
 
 
+class CategoryCoefficient(models.Model):
+    """
+    Модель коэффициентов стоимости услуг в зависимости от категории врача
+    """
+
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, unique=True, verbose_name="Категория", default='none')
+    coefficient = models.DecimalField(max_digits=3, decimal_places=2, verbose_name="Коэффициент")
+
+    class Meta:
+        verbose_name = "Коэффициент категории"
+        verbose_name_plural = "Коэффициенты категорий"
+
+    def __str__(self):
+        return f"{self.get_category_display()} - {self.coefficient}"
+
+
 class Appointment(models.Model):
     """
     Модель записи пациента на прием к врачу
@@ -175,6 +192,7 @@ class Appointment(models.Model):
     date = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled', verbose_name="Статус")
     notes = models.TextField(verbose_name="Примечания", blank=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость", editable=False, default=0)
 
     class Meta:
         verbose_name = "Запись на прием"
@@ -264,6 +282,17 @@ class Appointment(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.full_clean()
+
+            # Расчет стоимости на основе категории врача
+            category = self.doctor.category if hasattr(self.doctor, 'category') else 'none'
+            try:
+                coefficient = CategoryCoefficient.objects.get(category=category).coefficient
+            except CategoryCoefficient.DoesNotExist:
+                coefficient = 1
+                print(
+                    f"WARNING: Коэффициент для категории '{category}' не найден, используется коэффициент по умолчанию 1.0")
+            self.cost = self.service.price * coefficient
+
             super().save(*args, **kwargs)
             
             self.update_slots_status('busy')

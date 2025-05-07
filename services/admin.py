@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from services.models import Service, Department, Appointment, Schedule, Slot
+from services.models import Service, Department, Appointment, Schedule, Slot, CategoryCoefficient
 
 
 @admin.register(Service)
@@ -13,7 +13,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'doctor', 'service', 'appointment_date', 'appointment_time', 'status')
+    list_display = ('patient', 'doctor', 'service', 'appointment_date', 'appointment_time', 'status', 'cost')
     list_filter = ('status', 'appointment_date', 'doctor')
     search_fields = ('patient__email', 'doctor__last_name', 'service__name')
     ordering = ('-date', 'appointment_date', 'appointment_time')
@@ -35,3 +35,10 @@ class SlotAdmin(admin.ModelAdmin):
     search_fields = ('schedule__doctor__user__last_name__icontains', 'schedule__doctor__user__first_name__icontains', 'date')
     ordering = ('date', 'number')
     readonly_fields = ('previous_slot',)
+
+
+@admin.register(CategoryCoefficient)
+class CategoryCoefficientAdmin(admin.ModelAdmin):
+    list_display = ('category', 'coefficient')
+    list_filter = ('category',)
+    ordering = ('category',)
