@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from services.models import Service, Department, Appointment, Schedule, Slot, CategoryCoefficient, DiagnosticResult
+from services.models import Service, Appointment, Schedule, Slot, CategoryCoefficient, DiagnosticResult, Review
 
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ("name", "department", "duration", "price", "is_active")
+    list_display = ("name", "department", "duration", "price", "is_active", "rating")
     list_filter = ("department", "is_active")
     ordering = ("department", "-duration", "name")
     search_fields = ("name", "description")
@@ -68,15 +68,6 @@ class DiagnosticResultAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-    # readonly_fields = (
-    #     "diagnosis",
-    #     "recommendations",
-    #     "medications",
-    #     "attachments",
-    #     "status",
-    #     "created_at",
-    #     "updated_at",
-    # )
     list_filter = ("created_at",)
     search_fields = (
         "appointment__patient__user__last_name__icontains",
@@ -84,3 +75,25 @@ class DiagnosticResultAdmin(admin.ModelAdmin):
         "diagnosis",
     )
     ordering = ("-created_at",)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "doctor",
+        "service",
+        "date",
+        "doctor_rating",
+        "service_rating",
+        "is_anonymous",
+    )
+    list_filter = (
+        'doctor',
+        'service',
+        'date'
+    )
+    search_fields = (
+        'user__user__last_name__icontains',
+        'user__user__first_name__icontains',
+    )
+    ordering = ('-date',)
