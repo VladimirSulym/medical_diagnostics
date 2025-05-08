@@ -1,0 +1,75 @@
+<div class="row py-5">
+    <h2 class="text-center mb-4 text-primary">Оставить отзыв</h2>
+    <div class="col-md-8 mx-auto">
+        {#            <form method="post" action="{% url 'services:home' %}" enctype="multipart/form-data">#}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {#                {{ form.as_p }}#}
+            <div class="mb-3">
+                <label for="author" class="form-label">Автор</label>
+                <input type="text" class="form-control" id="author" name="author"
+                       value="{{ user.get_full_name }}"
+                       readonly>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="anonymous" onchange="toggleAuthor()"
+                       name="is_anonymous">
+                <label class="form-check-label" for="anonymous">Анонимный отзыв</label>
+            </div>
+            <div class="mb-3">
+                <label for="doctor" class="form-label">Выберите врача</label>
+                <select class="form-select" id="doctor" name="doctor_id" required>
+                    <option value="">Выберите врача</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}">{{ doctor }}</option>
+                    {% endfor %}
+                </select>
+                <div class="mt-2">
+                    <label class="form-label">Оценка врача</label>
+                    <div class="rating">
+                        {% for i in "12345"|make_list %}
+                            <input type="radio" name="doctor_rating" value="{{ i }}" id="doctor_{{ i }}"
+                                   required
+                                   onclick="handleRatingClick(this)">
+                            <label for="doctor_{{ i }}"><i class="bi bi-star-fill"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="department" class="form-label">Выберите отделение</label>
+                <select class="form-select" id="department" name="department_id" required>
+                    <option value="">Выберите отделение</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}">{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="service" class="form-label">Выберите услугу</label>
+                <select class="form-select" id="service" name="service_id" required disabled>
+                    <option value="">Сначала выберите отделение</option>
+                </select>
+                <div class="mt-2">
+                    <label class="form-label">Оценка услуги</label>
+                    <div class="rating">
+                        {% for i in "12345"|make_list %}
+                            <input type="radio" name="service_rating" value="{{ i }}" id="service_{{ i }}"
+                                   required
+                                   onclick="handleRatingClick(this)">
+                            <label for="service_{{ i }}"><i class="bi bi-star-fill"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="review_text" class="form-label">Текст отзыва</label>
+                <textarea class="form-control" id="review_text" name="text" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+        </form>
+    </div>
+</div>
+
+

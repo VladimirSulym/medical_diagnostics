@@ -185,7 +185,12 @@ class Doctor(models.Model):
     )
 
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, verbose_name="Пользователь", help_text="Связанный пользователь системы"
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        help_text="Связанный пользователь системы",
+        unique=True,
+        related_name="doctor",
     )
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, verbose_name="Отделение", help_text="Отделение, в котором работает врач"

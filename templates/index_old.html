@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{% block title %}VORTex{% endblock %}</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    {#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"#}
+    {#          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">#}
+    <script src="../static/js/jquery-3.7.1.min.js"></script>
+    <style>
+        @media screen and (max-width: 1440px) {
+            [id^="display_xl"] {
+                display: none;
+            }
+        }
+
+        @media (min-width: 1441px) {
+            [id^="display_sm"] {
+                display: none;
+            }
+        }
+
+        html {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body style="height: 100vh">
+
+<div class="container-fluid h-100">
+
+    <div class="row">
+        <nav class="navbar fixed-top bg-body pt-3">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center col-12">
+                    <div class="justify-content-center align-self-center">
+                        <button class="btn navbar-toggler-icon" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+                        </button>
+                        <a class="text-decoration-none" href="{% url 'sales:deals' %}">
+                            <img src="../static/img/logo_w.png" alt="logo vormagic" style="margin-left: 10px">
+                            <span class="h4 fw-lighter text-body" style="vertical-align: middle">VORTex</span>
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <form class="dropdown" action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-link dropdown-toggle text-decoration-none text-body fw-lighter" type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                {{ user.get_short_name }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="btn d-inline fw-lighter text-nowrap dropdown-item"
+                                       href="{% url 'password_change' %}">Изменить
+                                    пароль</a></li>
+                                {% if user.is_staff %}
+                                    <li>
+                                        <a class="btn d-inline fw-lighter dropdown-item" href="/admin/">Админка</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <button class="btn d-inline fw-lighter py-0 dropdown-item" type="submit">Выйти
+                                    </button>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row h-100" style="padding-top: 55px">
+        <div class="col-1 border-end px-3 offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1"
+             id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel" style="width: 300px">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title fw-lighter" id="offcanvasResponsiveLabel">Меню VORTex</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                        data-bs-target="#offcanvasResponsive" aria-label="Закрыть"></button>
+            </div>
+            <div class="offcanvas-body fw-lighter">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <h5 class="text-primary-emphasis fw-lighter py-0">Продажи</h5>
+                        <div class="nav-tabs"></div>
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3" href="{% url 'sales:deals' %}">Сделки</a>
+                        {% endif %}
+                        {% if perms.sales.view_sale %}
+                            <a class="nav-link py-1 ps-3" href="{% url 'sales:sales' %}">Реализации</a>
+                        {% endif %}
+                        {% if perms.sales.view_payment %}
+                            <a class="nav-link py-1 ps-3 text-nowrap" href="{% url 'sales:payments' %}">Поступления
+                                ДС</a>
+                        {% endif %}
+                        {% if perms.sales.view_homework %}
+                            <a class="nav-link py-1 ps-3 text-nowrap" href="{% url 'sales:hw' %}">Домашнее задание</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-nowrap"
+                               href="{% url 'sales:debt' %}">Дебиторская задолженность</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-nowrap"
+                               href="{% url 'sales:expected-payment' %}">Ожидаемые поступления денег</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled text-nowrap"
+                               href="{% url 'salary:month-bonus' %}">ABC анализ</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled text-nowrap"
+                               href="{% url 'salary:month-bonus' %}">Регистрация объектов</a>
+                        {% endif %}
+                    </li>
+                    <br>
+                    <li class="nav-item">
+                        <h5 class="text-success-emphasis fw-lighter py-0">Сотрудники</h5>
+                        <div class="nav-tabs"></div>
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3" href="{% url 'salary:plans' %}">План
+                                продаж</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3" href="{% url 'salary:month-bonus' %}">Бонусы за месяц</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3"
+                               href="{% url 'salary:quarter-bonus' %}">Бонусы
+                                за квартал / Годовой</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled"
+                               href="{% url 'salary:month-bonus' %}">Доходы
+                                / ROI</a>
+                        {% endif %}
+                        {% if perms.salary.view_monthlybonus %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled"
+                               href="{% url 'salary:month-bonus' %}">Мотивация 2025</a>
+                        {% endif %}
+                    </li>
+                    <br>
+                    <li class="nav-item">
+                        <h5 class="text-danger-emphasis fw-lighter py-0">Продукция</h5>
+                        <div class="nav-tabs"></div>
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled" href="#">Остатки</a>
+                        {% endif %}
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled" href="#">Поступление продукции</a>
+                        {% endif %}
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled" href="#">Конфигуратор</a>
+                        {% endif %}
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled text-nowrap" href="#">Подбор
+                                оборудования</a>
+                        {% endif %}
+                    </li>
+                    <br>
+                    <li class="nav-item">
+                        <h5 class="text-warning-emphasis fw-lighter py-0">Услуги</h5>
+                        <div class="nav-tabs"></div>
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled" href="#">Сервис</a>
+                        {% endif %}
+                        {% if perms.sales.view_deal %}
+                            <a class="nav-link py-1 ps-3 text-body-tertiary disabled" href="#">Мониторинг</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col p-0 px-3 text-decoration-none pb-5">
+            <div class="row">
+                <div class="d-flex justify-content-start align-items-start mt-3">
+                    {% block title_page %}
+                        <h4 class="text-primary">Название страницы</h4>
+                    {% endblock %}
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+            <nav class="navbar fixed-bottom bg-body p-2">
+                <div class="container-fluid">
+                    <div class="text-body-secondary fw-lighter">VORTex v.1.5.0 | 2025 | Made by VORMagic &reg</div>
+                    <div class="text-secondary-emphasis fw-lighter" style="font-size: 1.1rem">
+                        <span>Курс на {{ currency_date }} |</span>
+                        {% for cur, value in currency_value.items %}
+                            <span>&nbsp;{{ cur }}: {{ value }} |</span>
+                        {% endfor %}
+                    </div>
+{#                    <a class="navbar-brand" href="#">VORTex v.1.3.4 | 2025 | Made by VORMagic &reg</a>#}
+                </div>
+            </nav>
+            {#            <p class="text-secondary fw-lighter pt-2">VORTex v.1.3.4 | 2025 | Made by VORMagic &reg</p>#}
+        </div>
+    </div>
+</div>
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"#}
+{#        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"#}
+{#        crossorigin="anonymous"></script>#}
+<script src="../static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
