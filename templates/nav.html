@@ -17,13 +17,13 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="{% url "services:home" %}">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Услуги</a>
+                        <a class="nav-link active" aria-current="page" href="{% url "services:services" %}">Услуги</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">О компании</a>
+                        <a class="nav-link active" aria-current="page" href="{% url "users:about" %}">О компании</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Личный кабинет</a>

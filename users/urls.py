@@ -1,14 +1,12 @@
 from django.urls import path
 from . import views
 
-from .apps import ServicesConfig
+from .apps import UsersConfig
 
-app_name = ServicesConfig.name
+app_name = UsersConfig.name
 
 urlpatterns = [
-    path("", views.HomeView.as_view(), name="home"),
-    path("services/", views.ServiceView.as_view(), name="services"),
-    path("services/<int:pk>/", views.ServiceDetailView.as_view(), name="services_detail"),
+    path("about/", views.AboutView.as_view(), name="about"),
     # path("sales/", views.SalesView.as_view(), name="sales"),
     # path("payments/", views.PaymentsView.as_view(), name="payments"),
     # path("hw/", views.HWView.as_view(), name="hw"),

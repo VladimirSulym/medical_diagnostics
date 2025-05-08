@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 
-# Create your views here.
+from users.models import Doctor
+
+
+
+class AboutView(ListView):
+    model = Doctor
+    template_name = "develop.html"
+    context_object_name = "doctors"

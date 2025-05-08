@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ru" data-bs-theme="dark">
 {#<html lang="ru" data-bs-theme="light">#}
+{%  block head %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +14,7 @@
     <script src="../staticfiles/js/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="../staticfiles/css/style.css">
 </head>
+{% endblock %}
 <body>
 
 <div class="container">
@@ -27,52 +29,13 @@
     {% endblock %}
 
 </div>
+{% block script %}
 {#<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"#}
 {#        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"#}
 {#        crossorigin="anonymous"></script>#}
 <script src="../staticfiles/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
 <script>
-    document.getElementById('department').addEventListener('change', function () {
-        const departmentId = this.value;
-        const serviceSelect = document.getElementById('service');
-        serviceSelect.disabled = !departmentId;
-
-        if (departmentId) {
-            serviceSelect.innerHTML = '<option value="">Выберите услугу</option>';
-            {% for service in services %}
-                if ('{{ service.department.id }}' === departmentId) {
-                    serviceSelect.innerHTML += `<option value="{{ service.id }}">{{ service.name }}</option>`;
-                }
-            {% endfor %}
-        } else {
-            serviceSelect.innerHTML = '<option value="">Сначала выберите отделение</option>';
-        }
-    });
-
-    function handleRatingClick(radio) {
-        if (radio.classList.contains('clicked')) {
-            radio.checked = false;
-            radio.classList.remove('clicked');
-        } else {
-            let name = radio.name;
-            document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.classList.remove('clicked'));
-            radio.classList.add('clicked');
-        }
-    }
-
-    function toggleAuthor() {
-        const authorInput = document.getElementById('author');
-        const anonymous = document.getElementById('anonymous');
-
-        if (anonymous.checked) {
-            authorInput.value = "Анонимно";
-            authorInput.disabled = true;
-        } else {
-            authorInput.value = "{{ user.get_full_name }}";
-            authorInput.disabled = false;
-        }
-    }
-
     const darkModeToggle = document.getElementById('darkModeToggle');
     const htmlElement = document.documentElement;
     const icon = darkModeToggle.querySelector('i');
