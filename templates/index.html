@@ -36,6 +36,51 @@
 <script src="../staticfiles/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 <script>
+
+    function updateSlots(doctorId) {
+        document.querySelectorAll('.slot-item').forEach(slot => {
+            slot.style.display = slot.dataset.doctorId === doctorId ? 'block' : 'none';
+        });
+    }
+
+    document.getElementById('doctor').addEventListener('change', function () {
+        const doctorId = this.value;
+        const scheduleDiv = document.getElementById('doctorSchedule');
+        console.log(doctorId);
+
+        if (doctorId) {
+            scheduleDiv.innerHTML = `
+                <p class="card-text">
+                    <i class="bi bi-calendar3"></i> Свободный график на ближайшие 2 дня:<br>
+                    {% for slot in slots %}
+                        {% if slot.status == 'free' %}
+                        <div data-doctor-id="{{ slot.schedule.doctor.id }}" class="slot-item" style="display: none;">
+                            {% if slot.date == today or slot.date == future_date %}
+                                {{ slot.date|date:"d.m.Y" }} - {{ slot.get_number_display }}
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}<br>
+                    <i class="bi bi-calendar3"></i> Рабочие дни:<br>
+                    </br>
+                    Пн-Пт: 7:00 - 19:00<br>
+                    Сб: 7:00 - 19:00
+                </p>
+                <p class="card-text">
+                    <i class="bi bi-clock-history"></i> Длительность приема:<br>
+                    от 30 минут
+                </p>
+            `;
+        } else {
+            scheduleDiv.innerHTML = `
+                <p class="card-text text-muted">
+                    Выберите врача, чтобы увидеть его график работы
+                </p>
+            `;
+        }
+        updateSlots(doctorId);
+    });
+
     const darkModeToggle = document.getElementById('darkModeToggle');
     const htmlElement = document.documentElement;
     const icon = darkModeToggle.querySelector('i');

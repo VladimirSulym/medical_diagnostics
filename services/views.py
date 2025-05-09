@@ -1,10 +1,13 @@
+from datetime import timedelta, datetime
+
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib import messages
 
-from services.forms import ReviewForm
-from services.models import Service, Review
+from services.forms import ReviewForm, AppointmentForm
+from services.models import Service, Review, Appointment, Slot
 from users.models import Doctor, Department
 
 
@@ -76,3 +79,31 @@ class ServiceDetailView(DetailView):
     model = Service
     template_name = "services/service_detail.html"
     context_object_name = "service"
+
+
+class AppointmentCreateView(CreateView):
+    model = Appointment
+    template_name = "services/appointment_create.html"
+    form_class = AppointmentForm
+    success_url = reverse_lazy("services:services")
+
+    def form_valid(self, form):
+        form.instance.patient = self.request.user
+        try:
+            return super().form_valid(form)
+        except ValidationError as e:
+            form.add_error(None, e)
+            return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['doctors'] = Doctor.objects.all()
+        context['services'] = Service.objects.filter(is_active=True)
+        context["slots"] = Slot.objects.all()
+        context['today'] = datetime.now().date()
+        context['future_date'] = datetime.now().date() + timedelta(days=1)
+        return context
+
+    def get_success_url(self):
+        messages.success(self.request, "Запись на прием успешно создана")
+        return super().get_success_url()

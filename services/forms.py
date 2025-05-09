@@ -1,6 +1,7 @@
 from django import forms
+from django.utils import timezone
 
-from .models import Review
+from .models import Review, Appointment
 
 
 class ReviewForm(forms.ModelForm):
@@ -51,5 +52,50 @@ class ReviewForm(forms.ModelForm):
 
         if service_rating and not service:
             self.add_error("service", "Нельзя указать оценку услуги без выбора услуги")
+
+        return cleaned_data
+
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['service', 'doctor', 'appointment_date', 'appointment_time', 'notes']
+        widgets = {
+            'service': forms.Select(attrs={"class": "form-control"}),
+            'doctor': forms.Select(attrs={"class": "form-control"}),
+            'notes': forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            'appointment_date': forms.DateInput(attrs={"type": "date", "class": "form-control", "required": True}),
+            'appointment_time': forms.TimeInput(attrs={"type": "time", "class": "form-control", "required": True}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        service = cleaned_data.get('service')
+        doctor = cleaned_data.get('doctor')
+        appointment_date = cleaned_data.get('appointment_date')
+        appointment_time = cleaned_data.get('appointment_time')
+
+        if not appointment_date:
+            raise forms.ValidationError('Необходимо указать дату приема')
+
+        if not appointment_time:
+            raise forms.ValidationError('Необходимо указать время приема')
+
+        if not all([service, doctor, appointment_date, appointment_time]):
+            raise forms.ValidationError('Все поля должны быть заполнены')
+
+        # Проверка даты в будущем 
+        if appointment_date and appointment_date < timezone.now().date():
+            raise forms.ValidationError('Дата приема не может быть в прошлом')
+
+        # Проверка доступности врача
+        if doctor and appointment_date and appointment_time:
+            if Appointment.objects.filter(
+                    doctor=doctor,
+                    appointment_date=appointment_date,
+                    appointment_time=appointment_time,
+                    status='scheduled'
+            ).exists():
+                raise forms.ValidationError('Выбранное время уже занято')
 
         return cleaned_data
