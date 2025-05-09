@@ -37,6 +37,22 @@
 {% endblock %}
 <script>
 
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const htmlElement = document.documentElement;
+    const icon = darkModeToggle.querySelector('i');
+
+    darkModeToggle.addEventListener('click', () => {
+        if (htmlElement.getAttribute('data-bs-theme') === 'light') {
+            htmlElement.setAttribute('data-bs-theme', 'dark');
+            icon.classList.remove('bi-moon-fill');
+            icon.classList.add('bi-sun-fill');
+        } else {
+            htmlElement.setAttribute('data-bs-theme', 'light');
+            icon.classList.remove('bi-sun-fill');
+            icon.classList.add('bi-moon-fill');
+        }
+    });
+
     function updateSlots(doctorId) {
         document.querySelectorAll('.slot-item').forEach(slot => {
             slot.style.display = slot.dataset.doctorId === doctorId ? 'block' : 'none';
@@ -79,22 +95,6 @@
             `;
         }
         updateSlots(doctorId);
-    });
-
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const htmlElement = document.documentElement;
-    const icon = darkModeToggle.querySelector('i');
-
-    darkModeToggle.addEventListener('click', () => {
-        if (htmlElement.getAttribute('data-bs-theme') === 'light') {
-            htmlElement.setAttribute('data-bs-theme', 'dark');
-            icon.classList.remove('bi-moon-fill');
-            icon.classList.add('bi-sun-fill');
-        } else {
-            htmlElement.setAttribute('data-bs-theme', 'light');
-            icon.classList.remove('bi-sun-fill');
-            icon.classList.add('bi-moon-fill');
-        }
     });
 </script>
 </body>

@@ -1,7 +1,8 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
+from services.models import Slot, Schedule
 from users.forms import UserRegistrationForm
 from users.models import Doctor, Department, User
 
@@ -35,3 +36,26 @@ class RegistrationView(CreateView):
         user.set_password(form.cleaned_data["password1"])
         user.save()
         return super().form_valid(form)
+
+
+class ProfileView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = "users/profile.html"
+    context_object_name = "users"
+
+    # def get_queryset(self):
+    #     return User.objects.filter(id=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+
+        context = super().get_context_data(**kwargs)
+        context['appointments'] = user.appointments.all()
+        context['reviews'] = user.reviews.all()
+
+        if hasattr(user, 'doctor') and user.doctor is not None:
+            doctor = user.doctor
+            context['slots'] = Slot.objects.filter(schedule__doctor=doctor).order_by('-date')
+            context['schedules'] = Schedule.objects.filter(doctor=doctor)
+
+        return context

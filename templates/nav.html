@@ -11,7 +11,8 @@
                     {{ user.get_full_name }}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Личный кабинет</a></li>
+                    <li><a class="dropdown-item" href="{% url "users:profile" %}"><i class="bi bi-person"></i> Личный
+                        кабинет</a></li>
                     <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="bi bi-key"></i>
                         Изменить пароль</a></li>
                     <li>
@@ -53,11 +54,14 @@
                         <a class="nav-link active" aria-current="page" href="{% url "users:about" %}">О компании</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Личный кабинет</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Контакты</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url "users:profile" %}">Личный
+                                кабинет</a>
+                        </li>
+                    {% endif %}
                     {% if user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page"
