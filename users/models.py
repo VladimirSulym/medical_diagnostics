@@ -178,6 +178,12 @@ class Doctor(models.Model):
     Модель врача, связанная с пользователем и отделением клиники
     """
 
+    photo = models.ImageField(
+        upload_to="doctors/", verbose_name="Фотография", help_text="Фотография врача", null=True, blank=True
+    )
+
+    description = models.TextField(verbose_name="Описание", help_text="Подробная информация о враче", blank=True)
+
     ACADEMIC_DEGREE_CHOICES = (
         ("none", "Нет"),
         ("candidate", "Кандидат медицинских наук"),
@@ -232,6 +238,10 @@ class Doctor(models.Model):
             "user__first_name",
         ]
         unique_together = ["user", "department"]
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["department"]),
+        ]
 
     def clean(self):
         super().clean()

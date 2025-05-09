@@ -7,7 +7,7 @@ app_name = UsersConfig.name
 
 urlpatterns = [
     path("about/", views.AboutView.as_view(), name="about"),
-    # path("sales/", views.SalesView.as_view(), name="sales"),
+    path("register/", views.RegistrationView.as_view(), name="register"),
     # path("payments/", views.PaymentsView.as_view(), name="payments"),
     # path("hw/", views.HWView.as_view(), name="hw"),
     # path("debt/", views.DebtView.as_view(), name="debt"),

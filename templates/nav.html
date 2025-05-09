@@ -4,7 +4,34 @@
                 aria-controls="offcanvasNavbar" aria-label="Переключить навигацию">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand me-2" href="#">Вход | Регистрация</a>
+        {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="btn dropdown-toggle text-body-secondary" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="font-size: 14px;">
+                    {{ user.get_full_name }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Личный кабинет</a></li>
+                    <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="bi bi-key"></i>
+                        Изменить пароль</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-box-arrow-right"></i> Выйти
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        {% else %}
+            <a class="navbar-brand me-2" href="{% url 'login' %}" style="font-size: 14px;">Вход</a> |
+            <a class="navbar-brand me-2" href="{% url 'users:register' %}"
+               style="font-size: 14px;">&nbsp;Регистрация</a>
+        {% endif %}
         <button class="btn" type="button" id="darkModeToggle">
             <i class="bi bi-moon-fill"></i>
         </button>

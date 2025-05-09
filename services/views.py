@@ -28,28 +28,28 @@ class HomeView(ListView):
     def post(self, request, *args, **kwargs):
         post_data = request.POST.copy()
         if not post_data.get("doctor_rating"):
-            post_data['doctor_rating'] = 0
+            post_data["doctor_rating"] = 0
         if not post_data.get("service_rating"):
-            post_data['service_rating'] = 0
+            post_data["service_rating"] = 0
 
         form = ReviewForm(post_data)
 
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user if not form.cleaned_data['is_anonymous'] else None
+            review.user = request.user if not form.cleaned_data["is_anonymous"] else None
             try:
                 review.save()
-                messages.success(request, 'Спасибо! Ваш отзыв успешно добавлен.')
-                return redirect('services:home')
+                messages.success(request, "Спасибо! Ваш отзыв успешно добавлен.")
+                return redirect("services:home")
             except Exception as e:
-                messages.error(request, f'Произошла ошибка при сохранении отзыва: {str(e)}')
+                messages.error(request, f"Произошла ошибка при сохранении отзыва: {str(e)}")
         else:
-            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
+            messages.error(request, "Пожалуйста, исправьте ошибки в форме.")
 
         # В случае ошибки возвращаем страницу с формой и ошибками
         self.object_list = self.get_queryset()
         context = self.get_context_data()
-        context['form'] = form
+        context["form"] = form
         print(context)
         return self.render_to_response(context)
 

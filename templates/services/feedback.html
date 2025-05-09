@@ -25,7 +25,8 @@
             <div class="mb-3">
                 <label for="author" class="form-label">Автор</label>
                 <input type="text" class="form-control" id="author" name="author"
-                       value="{{ user.get_full_name }}"
+                       value="
+                               {% if user.is_authenticated %}{{ user.get_full_name }}{% else %}Пожалуйста, войдите в систему или оставьте отзыв анонимно{% endif %}"
                        readonly>
             </div>
 
@@ -153,7 +154,7 @@
             authorInput.value = "Анонимно";
             authorInput.disabled = true;
         } else {
-            authorInput.value = "{{ user.get_full_name }}";
+            authorInput.value = "{% if user.is_authenticated %}{{ user.get_full_name }}{% else %}Пожалуйста, войдите в систему или оставьте отзыв анонимно{% endif %}";
             authorInput.disabled = false;
         }
     }
