@@ -8,215 +8,200 @@
 
 {% block content %}
 
-        <div class="container mt-5 pt-5 pb-4">
-            <h2 class="mb-4 text-primary"><i class="bi bi-calendar-plus me-2"></i>Запись на прием</h2>
+    <div class="container mt-5 pt-5 pb-4">
+        <h2 class="mb-4 text-primary"><i class="bi bi-calendar-plus me-2"></i>Запись на прием</h2>
 
-            <div class="row justify-content-center">
-                <div class="col-md-8 p-4 bg-body-tertiary rounded shadow-sm">
+        <div class="row justify-content-center">
+            <div class="col-md-8 p-4 bg-body-tertiary rounded shadow-sm">
                 <form method="post" class="needs-validation" novalidate>
 
-                        {% csrf_token %}
+                    {% csrf_token %}
 
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-                        {% if messages %}
-                            <div class="messages">
-                                {% for message in messages %}
-                                    <div class="alert alert-{{ message.tags }}">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
                     <div class="mb-4">
                         <label for="{{ form.service.id_for_label }}" class="form-label"><i
                                 class="bi bi-clipboard2-pulse me-2"></i>Выберите услугу</label>
                         <select class="form-select shadow-sm" id="service" name="service" required>
                             <option value="">Выберите услугу</option>
-                                {% for service in form.service.field.queryset %}
-                                    <option value="{{ service.id }}">{{ service }} / {{ service.department }} /</option>
-                                {% endfor %}
-                            </select>
-                            {% if form.service.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.service.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                            {% for service in form.service.field.queryset %}
+                                <option value="{{ service.id }}">{{ service }} / {{ service.department }} /</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.service.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.service.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
 
                     <div class="mb-4">
                         <label for="{{ form.doctor.id_for_label }}" class="form-label"><i
                                 class="bi bi-person-vcard me-2"></i>Выберите врача</label>
                         <select class="form-select shadow-sm" id="doctor" name="doctor" required>
                             <option value="">Выберите врача</option>
-                                {% for doctor in form.doctor.field.queryset %}
-                                    <option value="{{ doctor.id }}">{{ doctor }} / {{ doctor.department }} /</option>
-                                {% endfor %}
-                            </select>
-                            {% if form.doctor.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {{ form.doctor.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                            {% for doctor in form.doctor.field.queryset %}
+                                <option value="{{ doctor.id }}">{{ doctor }} / {{ doctor.department }} /</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.doctor.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.doctor.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
 
 
                     <div class="mb-4">
                         <label for="{{ form.appointment_date.id_for_label }}" class="form-label"><i
                                 class="bi bi-calendar3 me-2"></i>Дата приема</label>
                         {{ form.appointment_date }}
-                            {% if form.appointment_date.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.appointment_date.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% if form.appointment_date.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.appointment_date.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
 
                     <div class="mb-4">
                         <label for="{{ form.appointment_time.id_for_label }}" class="form-label"><i
                                 class="bi bi-clock me-2"></i>Время приема</label>
                         {{ form.appointment_time }}
-                            {% if form.appointment_time.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.appointment_time.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% if form.appointment_time.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.appointment_time.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
 
                     <div class="mb-4">
                         <label for="{{ form.notes.id_for_label }}" class="form-label"><i
                                 class="bi bi-chat-left-text me-2"></i>Дополнительные комментарии</label>
                         {{ form.notes }}
-                            {% if form.notes.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.notes.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% if form.notes.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.notes.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
 
-                        <!-- Другая форма -->
+                    <!-- Другая форма -->
 
-                        {#                        <div class="mb-3">#}
-                        {#                            <label for="doctor" class="form-label">Выберите врача</label>#}
-                        {#                            <select class="form-select" id="doctor" name="doctor" required>#}
-                        {#                                <option value="">Выберите врача</option>#}
-                        {#                                {% for doctor in doctors %}#}
-                        {#                                    <option value="{{ doctor.id }}">{{ doctor.user.get_full_name }}#}
-                        {#                                        ({{ doctor.specialization }})#}
-                        {#                                    </option>#}
-                        {#                                {% endfor %}#}
-                        {#                            </select>#}
-                        {#                            <div class="invalid-feedback">#}
-                        {#                                Пожалуйста, выберите врача#}
-                        {#                            </div>#}
-                        {#                        </div>#}
-                        {##}
-                        {#                        <div class="mb-3">#}
-                        {#                            <label for="appointment_date" class="form-label">Дата приема</label>#}
-                        {#                            <input type="date" class="form-control" id="appointment_date" name="appointment_date"#}
-                        {#                                   required>#}
-                        {#                            <div class="invalid-feedback">#}
-                        {#                                Пожалуйста, выберите дату приема#}
-                        {#                            </div>#}
-                        {#                        </div>#}
-                        {##}
-                        {#                        <div class="mb-3">#}
-                        {#                            <label for="appointment_time" class="form-label">Время приема</label>#}
-                        {#                            <input type="time" class="form-control" id="appointment_time" name="appointment_time"#}
-                        {#                                   required>#}
-                        {#                            <div class="invalid-feedback">#}
-                        {#                                Пожалуйста, выберите время приема#}
-                        {#                            </div>#}
-                        {#                        </div>#}
-                        {##}
-                        {#                        <div class="mb-3">#}
-                        {#                            <label for="notes" class="form-label">Дополнительные комментарии</label>#}
-                        {#                            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>#}
-                        {#                        </div>#}
+{#                    <div class="mb-4">#}
+{#                        <label for="{{ form.appointment_date.id_for_label }}" class="form-label"><i#}
+{#                                class="bi bi-calendar3 me-2"></i>Дата приема<span class="text-danger">*</span></label>#}
+{#                        {{ form.appointment_date }}#}
+{#                        {% if form.appointment_date.errors %}#}
+{#                            <div class="invalid-feedback d-block">#}
+{#                                {{ form.appointment_date.errors }}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{##}
+{#                    <div class="mb-4">#}
+{#                        <label for="{{ form.appointment_time.id_for_label }}" class="form-label"><i#}
+{#                                class="bi bi-clock me-2"></i>Время приема<span class="text-danger">*</span></label>#}
+{#                        {{ form.appointment_time }}#}
+{#                        {% if form.appointment_time.errors %}#}
+{#                            <div class="invalid-feedback d-block">#}
+{#                                {{ form.appointment_time.errors }}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+
 
                     <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow-sm"><i
                             class="bi bi-calendar-check me-2"></i>Записаться на прием
                     </button>
                 </form>
-                </div>
+            </div>
 
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Информация</h5>
-                            <p class="card-text">
-                                <i class="bi bi-info-circle"></i> После отправки формы мы свяжемся с вами для
-                                подтверждения записи.
-                            </p>
-                            <p class="card-text">
-                                <i class="bi bi-clock"></i> Время работы клиники:<br>
-                                Пн-Пт: 7:00 - 19:00<br>
-                                Сб-Вс: 7:00 - 19:00
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Информация</h5>
+                        <p class="card-text">
+                            <i class="bi bi-info-circle"></i> После отправки формы мы свяжемся с вами для
+                            подтверждения записи.
+                        </p>
+                        <p class="card-text">
+                            <i class="bi bi-clock"></i> Время работы клиники:<br>
+                            Пн-Пт: 7:00 - 19:00<br>
+                            Сб-Вс: 7:00 - 19:00
+                        </p>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">График работы врача</h5>
+                        <div id="doctorSchedule">
+                            <p class="card-text text-muted">
+                                Выберите врача, чтобы увидеть его график работы
                             </p>
                         </div>
                     </div>
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <h5 class="card-title">График работы врача</h5>
-                            <div id="doctorSchedule">
-                                <p class="card-text text-muted">
-                                    Выберите врача, чтобы увидеть его график работы
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+            </div>
 
+        </div>
+    </div>
+
+
+    <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-none d-md-block"
+         style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('../../media/img/doctor_ap.png'); background-size: auto 100%; background-position: left; background-repeat: no-repeat; height: 500px;">
+        {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
+        <div class="col-md-6 my-5 ms-auto">
+            <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+            <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+            <div class="fw-normal mb-3">
+                Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                инновационные
+                методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                вашем
+                здоровье.
+            </div>
+            <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                <a class="btn btn-outline-primary" href="#">Узнать больше</a>
             </div>
         </div>
+    </div>
 
-
-        <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-none d-md-block"
-             style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('../media/img/doctor_ap.png'); background-size: auto 100%; background-position: left; background-repeat: no-repeat; height: 500px;">
+    <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-md-none"
+         style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url(''); background-size: auto 100%; background-position: right; background-repeat: no-repeat; height: 300px;">
+        <div class="col-md-6">
             {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
-            <div class="col-md-6 my-5 ms-auto">
-                <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
-                <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
-                <div class="fw-normal mb-3">
-                    Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
-                    инновационные
-                    методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
-                    вашем
-                    здоровье.
-                </div>
-                <div class="d-flex gap-3 justify-content-center lead fw-normal">
-                    <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
-                    <a class="btn btn-outline-primary" href="#">Узнать больше</a>
-                </div>
+            <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+            <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+            <div class="fw-normal mb-3">
+                Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                инновационные
+                методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                вашем
+                здоровье.
+            </div>
+            <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                <a class="btn btn-outline-primary" href="#">Узнать больше</a>
             </div>
         </div>
-
-        <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-md-none"
-             style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url(''); background-size: auto 100%; background-position: right; background-repeat: no-repeat; height: 300px;">
-            <div class="col-md-6">
-                {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
-                <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
-                <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
-                <div class="fw-normal mb-3">
-                    Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
-                    инновационные
-                    методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
-                    вашем
-                    здоровье.
-                </div>
-                <div class="d-flex gap-3 justify-content-center lead fw-normal">
-                    <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
-                    <a class="btn btn-outline-primary" href="#">Узнать больше</a>
-                </div>
-            </div>
-        </div>
+    </div>
 
 {% endblock %}
 

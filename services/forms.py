@@ -76,17 +76,19 @@ class AppointmentForm(forms.ModelForm):
         appointment_time = cleaned_data.get('appointment_time')
 
         if not appointment_date:
-            raise forms.ValidationError('Необходимо указать дату приема')
+            self.add_error('appointment_date', 'Необходимо указать дату приема')
 
         if not appointment_time:
-            raise forms.ValidationError('Необходимо указать время приема')
+            self.add_error('appointment_time', 'Необходимо указать время приема')
 
-        if not all([service, doctor, appointment_date, appointment_time]):
-            raise forms.ValidationError('Все поля должны быть заполнены')
+        if not service:
+            self.add_error('service', 'Необходимо выбрать услугу')
 
-        # Проверка даты в будущем 
+        if not doctor:
+            self.add_error('doctor', 'Необходимо выбрать врача')
+
         if appointment_date and appointment_date < timezone.now().date():
-            raise forms.ValidationError('Дата приема не может быть в прошлом')
+            self.add_error('appointment_date', 'Дата приема не может быть в прошлом')
 
         # Проверка доступности врача
         if doctor and appointment_date and appointment_time:
@@ -96,6 +98,7 @@ class AppointmentForm(forms.ModelForm):
                     appointment_time=appointment_time,
                     status='scheduled'
             ).exists():
-                raise forms.ValidationError('Выбранное время уже занято')
-
+                self.add_error('appointment_time', 'Выбранное время уже занято') 
+    
         return cleaned_data
+

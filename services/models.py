@@ -520,14 +520,27 @@ class Appointment(models.Model):
         return None
 
     def clean(self):
+
+        if not self.doctor:
+            raise ValidationError("Необходимо выбрать врача")
+
+        if not self.service:
+            raise ValidationError("Необходимо выбрать услугу")
+
+        if not self.appointment_date:
+            raise ValidationError("Необходимо указать дату приема")
+
+        if not self.appointment_time:
+            raise ValidationError("Необходимо указать время приема")
+
         if self.appointment_date < timezone.now().date():
             raise ValidationError("Нельзя создать запись на прошедшую дату")
 
         if self.doctor.department != self.service.department:
             raise ValidationError("Врач и услуга должны относиться к одному отделению")
 
-        if not self.appointment_date or not self.appointment_time:
-            raise ValidationError("Необходимо указать дату и время приема")
+        # if not self.appointment_date or not self.appointment_time:
+        #     raise ValidationError("Необходимо указать дату и время приема")
 
         schedule = Schedule.objects.filter(doctor=self.doctor, date=self.appointment_date).first()
 

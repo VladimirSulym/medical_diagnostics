@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from services.forms import ReviewForm, AppointmentForm
 from services.models import Service, Review, Appointment, Slot
@@ -81,7 +82,7 @@ class ServiceDetailView(DetailView):
     context_object_name = "service"
 
 
-class AppointmentCreateView(CreateView):
+class AppointmentCreateView(LoginRequiredMixin, CreateView):
     model = Appointment
     template_name = "services/appointment_create.html"
     form_class = AppointmentForm
