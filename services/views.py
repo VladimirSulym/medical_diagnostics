@@ -54,7 +54,6 @@ class HomeView(ListView):
         self.object_list = self.get_queryset()
         context = self.get_context_data()
         context["form"] = form
-        print(context)
         return self.render_to_response(context)
 
 
