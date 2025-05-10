@@ -187,8 +187,6 @@ jobs:
           cd ~/django/medical_diagnostics/
           git pull
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/web:latest
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celery:latest
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celery-beat:latest
           docker compose down || true
           docker system prune -f
           docker compose up -d
