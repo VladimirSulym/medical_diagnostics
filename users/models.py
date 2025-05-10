@@ -57,7 +57,11 @@ class User(AbstractUser):
         max_length=16, verbose_name="Страховой полис", help_text="Номер страхового полиса", null=True, blank=True
     )
     document = models.CharField(
-        max_length=250, verbose_name="Документ", help_text="Паспорт или свидетельство о рождении", null=True, blank=True
+        max_length=250,
+        verbose_name="Документ",
+        help_text="Паспорт или свидетельство о рождении",
+        null=True,
+        blank=True,
     )
     address = models.TextField(verbose_name="Адрес", help_text="Полный адрес пользователя", null=True, blank=True)
     telegram = models.CharField(

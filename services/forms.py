@@ -59,46 +59,42 @@ class ReviewForm(forms.ModelForm):
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['service', 'doctor', 'appointment_date', 'appointment_time', 'notes']
+        fields = ["service", "doctor", "appointment_date", "appointment_time", "notes"]
         widgets = {
-            'service': forms.Select(attrs={"class": "form-control"}),
-            'doctor': forms.Select(attrs={"class": "form-control"}),
-            'notes': forms.Textarea(attrs={"class": "form-control", "rows": 3}),
-            'appointment_date': forms.DateInput(attrs={"type": "date", "class": "form-control", "required": True}),
-            'appointment_time': forms.TimeInput(attrs={"type": "time", "class": "form-control", "required": True}),
+            "service": forms.Select(attrs={"class": "form-control"}),
+            "doctor": forms.Select(attrs={"class": "form-control"}),
+            "notes": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "appointment_date": forms.DateInput(attrs={"type": "date", "class": "form-control", "required": True}),
+            "appointment_time": forms.TimeInput(attrs={"type": "time", "class": "form-control", "required": True}),
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        service = cleaned_data.get('service')
-        doctor = cleaned_data.get('doctor')
-        appointment_date = cleaned_data.get('appointment_date')
-        appointment_time = cleaned_data.get('appointment_time')
+        service = cleaned_data.get("service")
+        doctor = cleaned_data.get("doctor")
+        appointment_date = cleaned_data.get("appointment_date")
+        appointment_time = cleaned_data.get("appointment_time")
 
         if not appointment_date:
-            self.add_error('appointment_date', 'Необходимо указать дату приема')
+            self.add_error("appointment_date", "Необходимо указать дату приема")
 
         if not appointment_time:
-            self.add_error('appointment_time', 'Необходимо указать время приема')
+            self.add_error("appointment_time", "Необходимо указать время приема")
 
         if not service:
-            self.add_error('service', 'Необходимо выбрать услугу')
+            self.add_error("service", "Необходимо выбрать услугу")
 
         if not doctor:
-            self.add_error('doctor', 'Необходимо выбрать врача')
+            self.add_error("doctor", "Необходимо выбрать врача")
 
         if appointment_date and appointment_date < timezone.now().date():
-            self.add_error('appointment_date', 'Дата приема не может быть в прошлом')
+            self.add_error("appointment_date", "Дата приема не может быть в прошлом")
 
         # Проверка доступности врача
         if doctor and appointment_date and appointment_time:
             if Appointment.objects.filter(
-                    doctor=doctor,
-                    appointment_date=appointment_date,
-                    appointment_time=appointment_time,
-                    status='scheduled'
+                doctor=doctor, appointment_date=appointment_date, appointment_time=appointment_time, status="scheduled"
             ).exists():
-                self.add_error('appointment_time', 'Выбранное время уже занято') 
-    
-        return cleaned_data
+                self.add_error("appointment_time", "Выбранное время уже занято")
 
+        return cleaned_data

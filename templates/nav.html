@@ -44,28 +44,45 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url "services:home" %}">Главная</a>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:home" %}">
+                            <i class="bi bi-house-door"></i> Главная
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url "services:services" %}">Услуги</a>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:services" %}">
+                            <i class="bi bi-clipboard2-pulse"></i> Услуги
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url "users:about" %}">О компании</a>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "users:about" %}">
+                            <i class="bi bi-info-circle"></i> О компании
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Контакты</a>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:contacts" %}">
+                            <i class="bi bi-telephone"></i> Контакты
+                        </a>
                     </li>
+                    <hr class="my-3">
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url "users:profile" %}">Личный
-                                кабинет</a>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                               href="{% url "users:profile" %}">
+                                <i class="bi bi-person"></i> Личный кабинет
+                            </a>
                         </li>
                     {% endif %}
                     {% if user.is_staff %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page"
-                               href="{% url 'admin:index' %}">Админка</a>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                               href="{% url 'admin:index' %}">
+                                <i class="bi bi-gear"></i> Админка
+                            </a>
                         </li>
                     {% endif %}
                 </ul>

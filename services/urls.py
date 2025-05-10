@@ -10,6 +10,7 @@ urlpatterns = [
     path("services/", views.ServiceView.as_view(), name="services"),
     path("services/<int:pk>/", views.ServiceDetailView.as_view(), name="services-detail"),
     path("appointment_create/", views.AppointmentCreateView.as_view(), name="appointment-create"),
+    path("contacts/", views.ContactsView.as_view(), name="contacts"),
     # path("sales/", views.SalesView.as_view(), name="sales"),
     # path("payments/", views.PaymentsView.as_view(), name="payments"),
     # path("hw/", views.HWView.as_view(), name="hw"),
