@@ -1,14 +1,11 @@
 from datetime import datetime, timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.http import HttpResponseBadRequest
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 
-from services.models import Slot, Schedule, Service, DiagnosticResult
+from services.models import Slot, Schedule, DiagnosticResult
 from users.forms import UserRegistrationForm
 from users.models import Doctor, Department, User
 
@@ -73,30 +70,31 @@ class ProfileView(LoginRequiredMixin, ListView):
 
             if hasattr(user, "doctor") and user.doctor:
                 try:
-                    schedule = Schedule.objects.create(doctor=user.doctor, working_shift=working_shift, date=date)
+                    Schedule.objects.create(doctor=user.doctor, working_shift=working_shift, date=date)
                     messages.success(request, "Расписание успешно создано")
                 except IntegrityError:
-                    messages.error(request, f"Расписание на эту дату уже существует")
+                    messages.error(request, "Расписание на эту дату уже существует")
             else:
                 messages.error(request, "Данную форму могут заполнять только доктора")
         else:
 
             try:
                 appointment_id = request.POST.get("appointment_id")
-                patient_id = request.POST.get('patient_id')
-                diagnosis = request.POST.get('diagnosis')
-                recommendations = request.POST.get('recommendations')
-                medications = request.POST.get('medications')
-                status = request.POST.get('status')
+                patient_id = request.POST.get("patient_id")
+                diagnosis = request.POST.get("diagnosis")
+                recommendations = request.POST.get("recommendations")
+                medications = request.POST.get("medications")
+                status = request.POST.get("status")
 
                 # Проверяем, что пользователь является доктором
-                if not hasattr(user, 'doctor') or not user.doctor:
+                if not hasattr(user, "doctor") or not user.doctor:
                     messages.error(request, "Только доктор может создавать диагностические результаты")
                     return self.get(request, *args, **kwargs)
 
                 # Получаем объекты из базы данных
                 try:
                     from services.models import Appointment
+
                     appointment = Appointment.objects.get(id=appointment_id)
                     patient = User.objects.get(id=patient_id)
                 except (Appointment.DoesNotExist, User.DoesNotExist):
@@ -108,15 +106,15 @@ class ProfileView(LoginRequiredMixin, ListView):
                     patient=patient,
                     appointment=appointment,
                     defaults={
-                        'diagnosis': diagnosis,
-                        'recommendations': recommendations,
-                        'medications': medications,
-                        'status': status
-                    }
+                        "diagnosis": diagnosis,
+                        "recommendations": recommendations,
+                        "medications": medications,
+                        "status": status,
+                    },
                 )
 
-                if 'attachment' in request.FILES:
-                    result.attachments = request.FILES['attachment']
+                if "attachment" in request.FILES:
+                    result.attachments = request.FILES["attachment"]
                     result.save()
 
                 messages.success(request, "Диагностический результат успешно сохранен")
@@ -175,4 +173,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     ]
     template_name = "users/user_update.html"
     success_url = reverse_lazy("users:profile")
-

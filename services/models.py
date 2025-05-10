@@ -603,7 +603,7 @@ class Appointment(models.Model):
             except CategoryCoefficient.DoesNotExist:
                 coefficient = 1
                 print(
-                    f"WARNING: Коэффициент для категории '{category}' не найден, используется коэффициент по умолчанию 1.0"
+                    f"WARNING: Коэффициент для категории '{category}' не найден, используется коэффициент 1.0"
                 )
             self.cost = self.service.price * coefficient
 

@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from services.forms import ReviewForm, AppointmentForm
-from services.models import Service, Review, Appointment, Slot
+from services.models import Service, Appointment, Slot
 from users.models import Doctor, Department
 
 
@@ -107,6 +107,7 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, "Запись на прием успешно создана")
         return super().get_success_url()
+
 
 class ContactsView(ListView):
     model = Service

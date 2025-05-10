@@ -45,7 +45,7 @@ class ReviewForm(forms.ModelForm):
         service = cleaned_data.get("service")
 
         # if not (text or (doctor and doctor_rating > 0) or (service and service_rating > 0)):
-        #     self.add_error(None, "Необходимо заполнить хотя бы одно из: текст отзыва, оценку врача или оценку услуги")
+        # self.add_error(None, "Необходимо заполнить хотя бы одно из: текст отзыва, оценку врача или оценку услуги")
 
         if doctor_rating and not doctor:
             self.add_error("doctor", "Нельзя указать оценку врача без выбора врача")
