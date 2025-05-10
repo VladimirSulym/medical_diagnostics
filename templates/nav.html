@@ -1,0 +1,97 @@
+<nav class="navbar bg-body fixed-top">
+    <div class="container">
+        <button class="btn me-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Переключить навигацию">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="btn dropdown-toggle text-body-secondary" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="font-size: 14px;">
+                    {{ user.get_full_name }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{% url "users:profile" %}"><i class="bi bi-person"></i> Личный
+                        кабинет</a></li>
+                    <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="bi bi-key"></i>
+                        Изменить пароль</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-box-arrow-right"></i> Выйти
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        {% else %}
+            <a class="navbar-brand me-2" href="{% url 'login' %}" style="font-size: 14px;">Вход</a> |
+            <a class="navbar-brand me-2" href="{% url 'users:register' %}"
+               style="font-size: 14px;">&nbsp;Регистрация</a>
+        {% endif %}
+        <button class="btn" type="button" id="darkModeToggle">
+            <i class="bi bi-moon-fill"></i>
+        </button>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title text-primary" id="offcanvasNavbarLabel">QuantumMedical</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:home" %}">
+                            <i class="bi bi-house-door"></i> Главная
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:services" %}">
+                            <i class="bi bi-clipboard2-pulse"></i> Услуги
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "users:about" %}">
+                            <i class="bi bi-info-circle"></i> О компании
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                           href="{% url "services:contacts" %}">
+                            <i class="bi bi-telephone"></i> Контакты
+                        </a>
+                    </li>
+                    <hr class="my-3">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item mb-2">
+                            <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                               href="{% url "users:profile" %}">
+                                <i class="bi bi-person"></i> Личный кабинет
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <li class="nav-item mb-2">
+                            <a class="nav-link active d-flex align-items-center gap-2" aria-current="page"
+                               href="{% url 'admin:index' %}">
+                                <i class="bi bi-gear"></i> Админка
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                {#                    <form class="d-flex mt-3" role="search">#}
+                {#                        <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">#}
+                {#                        <button class="btn btn-outline-success" type="submit">Поиск</button>#}
+                {#                    </form>#}
+            </div>
+        </div>
+    </div>
+</nav>
+

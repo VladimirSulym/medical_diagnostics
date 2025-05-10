@@ -1,0 +1,185 @@
+{% extends "index.html" %}
+{% block title %}QuantumMedical / Главная{% endblock %}
+{% block title_page %}<h4 class="text-info p-0">Сделки</h4>{% endblock %}
+
+{% block nav %}
+    {% include "nav.html" %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="row h-100" style="padding-top: 55px">
+            <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-none d-md-block"
+                 style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('../../media/img/doctor_a.png'); background-size: auto 100%; background-position: left; background-repeat: no-repeat; height: 500px;">
+                {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
+                <div class="col-md-6 my-5 ms-auto">
+                    <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+                    <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+                    <div class="fw-normal mb-3">
+                        Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                        инновационные
+                        методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                        вашем
+                        здоровье.
+                    </div>
+                    <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                        <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                        <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-md-none"
+                 style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url(''); background-size: auto 100%; background-position: right; background-repeat: no-repeat; height: 300px;">
+                <div class="col-md-6">
+                    {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
+                    <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+                    <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+                    <div class="fw-normal mb-3">
+                        Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                        инновационные
+                        методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                        вашем
+                        здоровье.
+                    </div>
+                    <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                        <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                        <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="padding-top: 55px">
+            <!-- История компании -->
+            <section class="mb-5 p-4 rounded"
+                     style="background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.1), rgba(var(--bs-secondary-rgb), 0.1));">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="text-primary mb-4">История компании</h2>
+                        <p class="lead">QuantumMedical была основана в 2010 году группой ведущих специалистов в области
+                            медицины. За более
+                            чем десятилетний путь мы выросли из небольшой клиники в современный многопрофильный
+                            медицинский
+                            центр, оснащенный передовым оборудованием и укомплектованный высококвалифицированными
+                            специалистами.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-hospital text-primary" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Миссия -->
+            <section class="mb-5 p-4 rounded shadow-sm"
+                     style="background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.1), rgba(var(--bs-secondary-rgb), 0.1));">
+                <div class="row align-items-center">
+                    <div class="col-md-9">
+                        <h2 class="text-primary mb-4">Наша миссия</h2>
+                        <p class="lead">Обеспечивать каждого пациента качественной медицинской помощью, используя
+                            инновационные методы
+                            диагностики и лечения, создавая атмосферу заботы и профессионализма.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <i class="bi bi-heart-pulse text-primary" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ценности -->
+            <section class="mb-5">
+                <h2 class="text-primary mb-4 text-center">Наши ценности</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-0 shadow-sm" style="transition: all 0.3s ease;">
+                            <div class="card-body text-center">
+                                <i class="bi bi-award text-primary mb-3" style="font-size: 2.5rem;"></i>
+                                <h4 class="card-title">Профессионализм</h4>
+                                <p class="card-text">Постоянное совершенствование навыков и знаний наших
+                                    специалистов.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-0 shadow-sm" style="transition: all 0.3s ease;">
+                            <div class="card-body text-center">
+                                <i class="bi bi-lightbulb text-primary mb-3" style="font-size: 2.5rem;"></i>
+                                <h4 class="card-title">Инновации</h4>
+                                <p class="card-text">Применение современных технологий и методов лечения.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-0 shadow-sm" style="transition: all 0.3s ease;">
+                            <div class="card-body text-center">
+                                <i class="bi bi-heart text-primary mb-3" style="font-size: 2.5rem;"></i>
+                                <h4 class="card-title">Забота</h4>
+                                <p class="card-text">Индивидуальный подход к каждому пациенту.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Врачи -->
+            <section>
+                <h2 class="text-primary mb-4 text-center">Наши специалисты</h2>
+                {% for department in departments %}
+                    <h3 class="mt-4 text-body-secondary">{{ department }}</h3>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+                        {% for doctor in doctors %}
+                            {% if doctor.department == department %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    {% if doctor.photo %}
+                                        <img src="{{ doctor.photo.url }}" class="card-img-top shadow-sm rounded-top"
+                                             alt="{{ doctor.user.get_full_name }}"
+                                             style="object-fit: cover; height: 300px;">
+                                    {% endif %}
+                                    <div class="card-body p-4">
+                                        <h4 class="card-title fw-bold mb-3 text-success">{{ doctor.user.get_full_name }}</h4>
+                                        <p class="card-text mb-3">
+                                            <span class="badge bg-primary">{{ doctor.specialization }}</span>
+                                        </p>
+                                        <p class="card-text mb-3">
+                                            <small class="text-body-secondary fw-bold">
+                                                {% if doctor.academic_degree %}
+                                                    {{ doctor.get_academic_degree_display }}{% endif %}
+                                                {% if doctor.category %}, {{ doctor.get_category_display }}{% endif %}
+                                            </small>
+                                        </p>
+                                        <p class="card-text mb-3">{{ doctor.description }}</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-4">
+                                            <p class="card-text mb-0">
+                                                <i class="bi bi-clock me-2"></i>
+                                                <small class="text-body-secondary fw-bold">Стаж
+                                                    работы: {{ doctor.experience }}
+                                                    лет</small>
+                                            </p>
+                                            <p class="card-text mb-0">
+                                                <small class="text-body-secondary">
+                                                    Рейтинг:
+                                                    {% for i in "12345"|make_list %}
+                                                        {% if forloop.counter <= doctor.rating %}
+                                                            <i class="bi bi-star-fill text-warning"></i>
+                                                        {% else %}
+                                                            <i class="bi bi-star text-warning"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}

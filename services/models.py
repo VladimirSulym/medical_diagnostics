@@ -268,6 +268,7 @@ class Review(models.Model):
     """
     Модель отзывов пациентов о врачах и услугах
     """
+
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -275,7 +276,7 @@ class Review(models.Model):
         help_text="Пациент, который оставил отзыв",
         related_name="reviews",
         null=True,
-        blank=True
+        blank=True,
     )
     doctor = models.ForeignKey(
         Doctor,
@@ -284,7 +285,7 @@ class Review(models.Model):
         help_text="Врач, о котором оставлен отзыв",
         related_name="reviews",
         null=True,
-        blank=True
+        blank=True,
     )
     service = models.ForeignKey(
         Service,
@@ -293,36 +294,25 @@ class Review(models.Model):
         help_text="Услуга, о которой оставлен отзыв",
         related_name="reviews",
         null=True,
-        blank=True
+        blank=True,
     )
-    text = models.TextField(
-        verbose_name="Текст отзыва",
-        help_text="Содержание отзыва",
-        null=True,
-        blank=True
-    )
+    text = models.TextField(verbose_name="Текст отзыва", help_text="Содержание отзыва", null=True, blank=True)
     doctor_rating = models.IntegerField(
         verbose_name="Оценка врача",
         help_text="Оценка работы врача от 0 до 5",
         validators=[MinValueValidator(0), MaxValueValidator(5)],
-        default=0
+        default=0,
     )
     service_rating = models.IntegerField(
         verbose_name="Оценка услуги",
         help_text="Оценка качества услуги от 0 до 5",
         validators=[MinValueValidator(0), MaxValueValidator(5)],
-        default=0
+        default=0,
     )
     is_anonymous = models.BooleanField(
-        verbose_name="Анонимный отзыв",
-        help_text="Отметка об анонимности отзыва",
-        default=False
+        verbose_name="Анонимный отзыв", help_text="Отметка об анонимности отзыва", default=False
     )
-    date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Дата создания",
-        help_text="Дата создания отзыва"
-    )
+    date = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", help_text="Дата создания отзыва")
 
     class Meta:
         verbose_name = "Отзыв"
@@ -334,40 +324,32 @@ class Review(models.Model):
         return f"Отзыв{author} от {self.date.strftime('%d.%m.%Y')}"
 
     def clean(self):
-        if not any([
-            self.text,
-            self.doctor and self.doctor_rating > 0,
-            self.service and self.service_rating > 0
-        ]):
-            raise ValidationError(
-                "Необходимо заполнить хотя бы одно из: текст отзыва, оценку врача или оценку услуги"
-            )
+        if not any([self.text, self.doctor and self.doctor_rating > 0, self.service and self.service_rating > 0]):
+            raise ValidationError("Необходимо заполнить хотя бы одно из: текст отзыва, оценку врача или оценку услуги")
 
     def save(self, *args, **kwargs):
         """
         Обновляет рейтинги связанных врача и услуги при сохранении отзыва. Этот метод переопределяет
-        метод save родительского класса для добавления дополнительных операций - обновления среднего 
-        рейтинга связанного врача или услуги. Если с отзывом связан врач и указана валидная оценка 
-        врача, метод пересчитывает и обновляет общий рейтинг врача. Аналогично, если с отзывом связана 
+        метод save родительского класса для добавления дополнительных операций - обновления среднего
+        рейтинга связанного врача или услуги. Если с отзывом связан врач и указана валидная оценка
+        врача, метод пересчитывает и обновляет общий рейтинг врача. Аналогично, если с отзывом связана
         услуга и указана валидная оценка услуги, пересчитывается и обновляется общий рейтинг услуги.
         """
         self.full_clean()
         super().save(*args, **kwargs)
 
         if self.doctor and self.doctor_rating > 0:
-            avg_rating = Review.objects.filter(
-                doctor=self.doctor,
-                doctor_rating__gt=0
-            ).aggregate(Avg('doctor_rating'))['doctor_rating__avg']
+            avg_rating = Review.objects.filter(doctor=self.doctor, doctor_rating__gt=0).aggregate(
+                Avg("doctor_rating")
+            )["doctor_rating__avg"]
             if avg_rating:
                 self.doctor.rating = round(avg_rating, 2)
                 self.doctor.save()
 
         if self.service and self.service_rating > 0:
-            avg_rating = Review.objects.filter(
-                service=self.service,
-                service_rating__gt=0
-            ).aggregate(Avg('service_rating'))['service_rating__avg']
+            avg_rating = Review.objects.filter(service=self.service, service_rating__gt=0).aggregate(
+                Avg("service_rating")
+            )["service_rating__avg"]
             if avg_rating:
                 self.service.rating = round(avg_rating, 2)
                 self.service.save()
@@ -538,14 +520,27 @@ class Appointment(models.Model):
         return None
 
     def clean(self):
+
+        if not self.doctor:
+            raise ValidationError("Необходимо выбрать врача")
+
+        if not self.service:
+            raise ValidationError("Необходимо выбрать услугу")
+
+        if not self.appointment_date:
+            raise ValidationError("Необходимо указать дату приема")
+
+        if not self.appointment_time:
+            raise ValidationError("Необходимо указать время приема")
+
         if self.appointment_date < timezone.now().date():
             raise ValidationError("Нельзя создать запись на прошедшую дату")
 
         if self.doctor.department != self.service.department:
             raise ValidationError("Врач и услуга должны относиться к одному отделению")
 
-        if not self.appointment_date or not self.appointment_time:
-            raise ValidationError("Необходимо указать дату и время приема")
+        # if not self.appointment_date or not self.appointment_time:
+        #     raise ValidationError("Необходимо указать дату и время приема")
 
         schedule = Schedule.objects.filter(doctor=self.doctor, date=self.appointment_date).first()
 
@@ -608,7 +603,7 @@ class Appointment(models.Model):
             except CategoryCoefficient.DoesNotExist:
                 coefficient = 1
                 print(
-                    f"WARNING: Коэффициент для категории '{category}' не найден, используется коэффициент по умолчанию 1.0"
+                    f"WARNING: Коэффициент для категории '{category}' не найден, используется коэффициент 1.0"
                 )
             self.cost = self.service.price * coefficient
 

@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["51.250.20.233", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -59,7 +59,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -141,3 +143,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+LOGIN_REDIRECT_URL = "services:home"
+LOGOUT_REDIRECT_URL = "services:home"
+LOGIN_URL = "login"
+
+DATA_REPORTS_PATH = os.path.join(MEDIA_ROOT, "reports_to_process")

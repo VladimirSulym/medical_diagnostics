@@ -1,0 +1,139 @@
+{% extends "index.html" %}
+{% block title %}QuantumMedical / Главная{% endblock %}
+{% block title_page %}<h4 class="text-info p-0">Сделки</h4>{% endblock %}
+
+{% block nav %}
+    {% include "nav.html" %}
+{% endblock %}
+
+{% block content %}
+
+       <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-none d-md-block"
+             style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('../media/img/doctor_ap.png'); background-size: auto 100%; background-position: left; background-repeat: no-repeat; height: 500px;">
+            {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
+            <div class="col-md-6 my-5 ms-auto">
+                <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+                <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+                <div class="fw-normal mb-3">
+                    Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                    инновационные
+                    методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                    вашем
+                    здоровье.
+                </div>
+                <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                    <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                    <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="position-relative overflow-hidden p-3 p-md-5 text-center d-md-none"
+             style="background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url(''); background-size: auto 100%; background-position: right; background-repeat: no-repeat; height: 300px;">
+            <div class="col-md-6">
+                {#            <div class="col-md-6 p-lg-5 mx-auto my-5">#}
+                <h1 class="display-3 fw-bold text-primary">QuantumMedical</h1>
+                <h3 class="fw-normal mb-3">Ваше здоровье - наш главный приоритет</h3>
+                <div class="fw-normal mb-3">
+                    Мы предлагаем широкий спектр медицинских услуг, используя современное оборудование и
+                    инновационные
+                    методы лечения. Наша команда высококвалифицированных специалистов готова позаботиться о
+                    вашем
+                    здоровье.
+                </div>
+                <div class="d-flex gap-3 justify-content-center lead fw-normal">
+                    <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
+                    <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                </div>
+            </div>
+        </div>
+
+            <div class="container pt-5">
+            <h2 class="text-primary mb-4">Контактная информация</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm hover-shadow" style="transition: all 0.3s ease;">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary mb-4"><i class="bi bi-building text-primary"></i>
+                                QuantumMedical</h5>
+                            <p class="card-text">
+                                <i class="bi bi-geo-alt text-primary me-2"></i> г. Москва, ул. Медицинская, д. 1<br>
+                                <i class="bi bi-telephone text-primary me-2"></i> <a href="tel:+74951234567"
+                                                                                     class="text-decoration-none text-body-secondary">+7
+                                (495) 123-45-67</a><br>
+                                <i class="bi bi-envelope text-primary me-2"></i> <a href="mailto:info@quantmed.ru"
+                                                                                    class="text-decoration-none text-body-secondary">info@quantmed.ru</a>
+                            </p>
+                            <h6 class="mt-4 text-primary mb-3"><i class="bi bi-clock"></i> Режим работы:</h6>
+                            <p class="card-text text-body-secondary px-3 py-2 bg-body-tertiary rounded">
+                                <i class="bi bi-calendar3-week"></i> Пн-Пт: 7:00 - 19:00<br>
+                                <i class="bi bi-calendar3-week"></i> Сб: 7:00 - 19:00<br>
+                                <i class="bi bi-calendar3-week"></i> Вс: 7:00 - 19:00
+                            </p>
+                            <h6 class="mt-4 text-primary mb-3"><i class="bi bi-file-text"></i> Реквизиты</h6>
+                            <p class="card-text text-body-secondary px-3 py-2 bg-body-tertiary rounded">
+                                <i class="bi bi-building"></i> ООО "QuantumMedical"<br>
+                                <i class="bi bi-card-text"></i> ИНН: 7700123456<br>
+                                <i class="bi bi-card-text"></i> ОГРН: 1234567890123<br>
+                                <i class="bi bi-bank"></i> р/с: 40702810123450987654 в ПАО Сбербанк<br>
+                                <i class="bi bi-bank"></i> к/с: 30101810400000000225<br>
+                                <i class="bi bi-bank"></i> БИК: 044525225<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary mb-3"><i class="bi bi-map"></i> Как добраться</h5>
+                            <div id="map" style="height: 400px;" class="rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card shadow-sm hover-shadow" style="transition: all 0.3s ease;">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary mb-4"><i class="bi bi-info-circle text-primary"></i>
+                                Дополнительная
+                                информация
+                            </h5>
+                            <p class="card-text text-body-secondary">
+                            От станции метро "Медицинская" - 5 минут пешком<br>
+                                Автобусы: 123, 456, 789<br>
+                                Троллейбусы: 12, 34<br>
+                                Есть парковка для пациентов
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+        <script>
+            var map = L.map('map').setView([55.7558, 37.6173], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+
+            var marker = L.marker([55.7558, 37.6173]).addTo(map);
+            marker.bindPopup("<b>QuantumMedical</b><br>ул. Медицинская, д. 1").openPopup();
+        </script>
+
+
+{% block feedback %}
+    {% include "services/feedback.html" %}
+{% endblock %}
+
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}

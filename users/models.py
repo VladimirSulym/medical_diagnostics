@@ -57,7 +57,11 @@ class User(AbstractUser):
         max_length=16, verbose_name="Страховой полис", help_text="Номер страхового полиса", null=True, blank=True
     )
     document = models.CharField(
-        max_length=20, verbose_name="Документ", help_text="Паспорт или свидетельство о рождении", null=True, blank=True
+        max_length=250,
+        verbose_name="Документ",
+        help_text="Паспорт или свидетельство о рождении",
+        null=True,
+        blank=True,
     )
     address = models.TextField(verbose_name="Адрес", help_text="Полный адрес пользователя", null=True, blank=True)
     telegram = models.CharField(
@@ -178,6 +182,12 @@ class Doctor(models.Model):
     Модель врача, связанная с пользователем и отделением клиники
     """
 
+    photo = models.ImageField(
+        upload_to="doctors/", verbose_name="Фотография", help_text="Фотография врача", null=True, blank=True
+    )
+
+    description = models.TextField(verbose_name="Описание", help_text="Подробная информация о враче", blank=True)
+
     ACADEMIC_DEGREE_CHOICES = (
         ("none", "Нет"),
         ("candidate", "Кандидат медицинских наук"),
@@ -185,7 +195,12 @@ class Doctor(models.Model):
     )
 
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, verbose_name="Пользователь", help_text="Связанный пользователь системы"
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        help_text="Связанный пользователь системы",
+        unique=True,
+        related_name="doctor",
     )
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, verbose_name="Отделение", help_text="Отделение, в котором работает врач"
@@ -227,6 +242,10 @@ class Doctor(models.Model):
             "user__first_name",
         ]
         unique_together = ["user", "department"]
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["department"]),
+        ]
 
     def clean(self):
         super().clean()

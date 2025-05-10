@@ -1,0 +1,574 @@
+{% extends "index.html" %}
+{% block title %}QuantumMedical / Профиль{% endblock %}
+
+{% block nav %}
+    {% include "nav.html" %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-lg border-0 mb-4 rounded-3 hover-shadow">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h3 class="mb-0 text-primary">{{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}</h3>
+                                    <a href="{% url 'users:user-update' user.id %}"
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Редактировать профиль
+                                    </a>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-envelope text-primary me-2"></i>{{ user.email }}
+                                        </p>
+                                        {% if user.phone %}
+                                            <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                                <i class="bi bi-telephone text-primary me-2"></i>{{ user.phone }}
+                                            </p>
+                                        {% endif %}
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-gender-ambiguous text-primary me-2"></i>Пол: {{ user.get_gender_display|default:"Не указан" }}
+                                        </p>
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-calendar-date text-primary me-2"></i>Дата
+                                            рождения: {{ user.birth_date|date:"d.m.Y"|default:"Не указана" }}
+                                        </p>
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-file-medical text-primary me-2"></i>Номер страхового
+                                            полиса: {{ user.insurance_policy|default:"Не указан" }}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-person-vcard text-primary me-2"></i>Документ: {{ user.document|default:"Не указан" }}
+                                        </p>
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-geo-alt text-primary me-2"></i>Адрес: {{ user.address|default:"Не указан" }}
+                                        </p>
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-telegram text-primary me-2"></i>Telegram: {{ user.telegram|default:"Не указан" }}
+                                        </p>
+                                        <p class="text-muted mb-3 p-2 border-start border-primary border-3 bg-body-tertiary rounded-end">
+                                            <i class="bi bi-calendar3 text-primary me-2"></i>Дата
+                                            регистрации: {{ user.date_joined|date:"d.m.Y" }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if user.doctor %}
+            <!-- Информация о враче -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Информация о враче</h5>
+                    <button class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i> Редактировать
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-3">
+                                <i class="bi bi-person-badge text-primary me-2"></i>
+                                <strong>Специализация:</strong> {{ user.doctor.specialization }}
+                            </p>
+                            <p class="mb-3">
+                                <i class="bi bi-hospital text-primary me-2"></i>
+                                <strong>Отделение:</strong> {{ user.doctor.department }}
+                            </p>
+                            <p class="mb-3">
+                                <i class="bi bi-clock-history text-primary me-2"></i>
+                                <strong>Стаж работы:</strong> {{ user.doctor.experience }} лет
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-3">
+                                <i class="bi bi-award text-primary me-2"></i>
+                                <strong>Ученая степень:</strong> {{ user.doctor.get_academic_degree_display }}
+                            </p>
+                            <p class="mb-3">
+                                <i class="bi bi-stars text-primary me-2"></i>
+                                <strong>Категория:</strong> {{ user.doctor.get_category_display }}
+                            </p>
+                        </div>
+                    </div>
+                    <p class="mb-0">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        <strong>Описание:</strong> {{ user.doctor.description }}
+                    </p>
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- График работы врача -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">График работы</h5>
+
+
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleModal">
+                        <i class="bi bi-plus-lg"></i> Добавить
+                    </button>
+                </div>
+
+                <!-- Модальное окно графика -->
+                <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="scheduleModalLabel">Добавить график работы</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="scheduleDate" class="form-label">Дата</label>
+                                        <input type="date" class="form-control" id="scheduleDate" name="date"
+                                               required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="workingShift" class="form-label">Рабочая смена</label>
+                                        <select class="form-select" id="workingShift" name="working_shift" required>
+                                            <option value="1">Первая смена (7:00 - 13:00)</option>
+                                            <option value="2">Вторая смена (13:00 - 19:00)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Рабочая смена</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for schedule in schedules %}
+                                {% if schedule.date >= today %}
+                                    <tr>
+                                        <td>{{ schedule.date|date:"d.m.Y" }}</td>
+                                        <td>{{ schedule.get_working_shift_display }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Приемы врача -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calendar2-check text-primary me-2"></i>
+                        Записи пациентов
+                    </h5>
+                    <button class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-filter"></i> Фильтр
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% regroup user.doctor.appointments.all by appointment_date as appointments_by_date %}
+                        {% for date in appointments_by_date %}
+                            <h6 class="border-bottom pb-2 mb-3 text-primary">
+                                <i class="bi bi-calendar3 me-2"></i>
+                                {{ date.grouper|date:"d.m.Y" }}
+                            </h6>
+                            <table class="table table-hover align-middle">
+                                <thead class="table">
+                                <tr>
+                                    <th><i class="bi bi-clock me-2"></i>Время</th>
+                                    <th><i class="bi bi-person me-2"></i>Пациент</th>
+                                    <th><i class="bi bi-clipboard2-pulse me-2"></i>Услуга</th>
+                                    <th class="text-center"><i class="bi bi-check-circle me-2"></i>Статус</th>
+                                    <th class="text-center"><i class="bi bi-file-earmark-medical me-2"></i>Результаты
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for appointment in date.list %}
+                                    <tr>
+                                        <td class="text-nowrap">{{ appointment.appointment_time }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-person-circle text-secondary me-2"></i>
+                                                {{ appointment.patient.get_full_name }}
+                                            </div>
+                                        </td>
+                                        <td>{{ appointment.service.name }}</td>
+                                        <td class="text-center">
+                                <span class="badge bg-{% if appointment.status == 'completed' %}success{% elif appointment.status == 'cancelled' %}danger{% else %}primary{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if appointment.diagnostic_result.status == 'completed' %}
+                                                <button type="button" class="btn btn-outline-success btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#diagnosticModal{{ appointment.id }}">
+                                                    <i class="bi bi-file-earmark-text"></i> Результаты
+                                                </button>
+                                            {% else %}
+                                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#diagnosticModal{{ appointment.id }}">
+                                                    <i class="bi bi-plus-lg"></i> Результаты
+                                                </button>
+                                            {% endif %}
+
+                                            <div class="modal fade" id="diagnosticModal{{ appointment.id }}"
+                                                 tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Результаты диагностики</h5>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form method="POST" action="">
+
+                                                            {% csrf_token %}
+
+                                                            <div class="modal-body">
+                                                                <div class="patient-info mb-4">
+                                                                    <h6 class="border-bottom pb-2">Информация о
+                                                                        пациенте</h6>
+                                                                    <p class="mb-1">
+                                                                        <strong>Пациент:</strong> {{ appointment.patient }}
+                                                                        <input type="hidden" name="patient_id"
+                                                                               value="{{ appointment.patient.id }}">
+                                                                    </p>
+                                                                    <p class="mb-1"><strong>Дата
+                                                                        рождения:</strong> {{ appointment.patient.birth_date|date:"d.m.Y" }}
+                                                                        ({{ appointment.patient.birth_date|timesince|truncatewords:2|cut:" months" }})
+                                                                    </p>
+                                                                    <p class="mb-1">
+                                                                        <strong>Полис:</strong> {{ appointment.patient.insurance_policy }}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Диагноз</label>
+                                                                    <input type="text" name="diagnosis"
+                                                                           class="form-control" required
+                                                                           value="{{ appointment.diagnostic_result.diagnosis|default:'' }}">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Рекомендации</label>
+                                                                    <textarea name="recommendations"
+                                                                              class="form-control" rows="3"
+                                                                              required>{{ appointment.diagnostic_result.recommendations|default:'' }}</textarea>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Назначенные
+                                                                        лекарства</label>
+                                                                    <textarea name="medications" class="form-control"
+                                                                              rows="3"
+                                                                              required>{{ appointment.diagnostic_result.medications|default:'' }}</textarea>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Прикрепленные
+                                                                        файлы</label>
+                                                                    <input type="file" name="attachments"
+                                                                           class="form-control" multiple>
+                                                                    {% if appointment.diagnostic_result.attachments %}
+                                                                        <small class="text-muted">Текущий
+                                                                            файл: {{ appointment.diagnostic_result.attachments.name }}</small>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Статус</label>
+                                                                    <select name="status" class="form-select" required>
+                                                                        <option value="">Выберите статус</option>
+                                                                        <option value="pending"
+                                                                                {% if appointment.diagnostic_result.status == 'pending' %}selected{% endif %}>
+                                                                            Черновик
+                                                                        </option>
+                                                                        <option value="completed"
+                                                                                {% if appointment.diagnostic_result.status == 'completed' %}selected{% endif %}>
+                                                                            Завершено
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                                <input type="hidden" name="appointment_id"
+                                                                       value="{{ appointment.id }}">
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Отмена
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    Сохранить
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+
+            <!-- Приемы пациента -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Мои записи на прием</h5>
+                    <a href="{% url 'services:appointment-create' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-lg"></i> Записаться на прием
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle shadow-sm">
+                            <thead class="table">
+                            <tr>
+                                <th><i class="bi bi-calendar3 me-2"></i>Дата</th>
+                                <th><i class="bi bi-clock me-2"></i>Время</th>
+                                <th><i class="bi bi-person-vcard me-2"></i>Врач</th>
+                                <th><i class="bi bi-clipboard2-pulse me-2"></i>Услуга</th>
+                                <th><i class="bi bi-currency-ruble me-2"></i>Стоимость</th>
+                                <th class="text-center"><i class="bi bi-check-circle me-2"></i>Статус</th>
+                                <th class="text-center"><i class="bi bi-credit-card me-2"></i>Оплата</th>
+                                <th class="text-center"><i class="bi bi-file-earmark-medical me-2"></i>Результаты</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for appointment in user.appointments.all %}
+                                <tr>
+                                    <td>{{ appointment.appointment_date|date:"d.m.Y" }}</td>
+                                    <td class="text-nowrap">{{ appointment.appointment_time }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle text-secondary me-2"></i>
+                                            {{ appointment.doctor.user.get_full_name }}
+                                        </div>
+                                    </td>
+                                    <td>{{ appointment.service.name }}</td>
+                                    <td>{{ appointment.cost }} ₽</td>
+                                    <td class="text-center">
+                                            <span class="badge bg-{% if appointment.status == 'completed' %}success{% elif appointment.status == 'cancelled' %}danger{% else %}primary{% endif %}">
+                                                {{ appointment.get_status_display }}
+                                            </span>
+                                    </td>
+                                    <td class="text-center">
+                                            <span class="badge {% if appointment.payment_status %}bg-success{% else %}bg-danger{% endif %}">
+                                                  {% if appointment.payment_status %} Оплачено {% else %} Не
+                                                      оплачено {% endif %}
+                                            </span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if appointment.diagnostic_result.status %}
+                                            <button type="button" class="btn btn-outline-success btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#diagnosticViewModal{{ appointment.id }}">
+                                                <i class="bi bi-file-earmark-text"></i> Просмотр
+                                            </button>
+
+                                            <div class="modal fade" id="diagnosticViewModal{{ appointment.id }}"
+                                                 tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary text-white">
+                                                            <h5 class="modal-title">
+                                                                <i class="bi bi-file-medical me-2"></i>
+                                                                Результаты диагностики
+                                                            </h5>
+                                                            <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="card mb-3 shadow-sm">
+                                                                <div class="card-body">
+                                                                    <div class="mb-4">
+                                                                        <h4 class="text-primary mb-3">
+                                                                            <i class="bi bi-clipboard2-pulse me-2"></i>
+                                                                            Диагноз
+                                                                        </h4>
+                                                                        <p class="form-control-static p-3 rounded text-start">
+                                                                            {{ appointment.diagnostic_result.diagnosis }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="mb-4">
+                                                                        <h4 class="text-primary mb-3">
+                                                                            <i class="bi bi-card-checklist me-2"></i>
+                                                                            Рекомендации
+                                                                        </h4>
+                                                                        <p class="form-control-static p-3 rounded text-start">
+                                                                            {{ appointment.diagnostic_result.recommendations }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="mb-4">
+                                                                        <h4 class="text-primary mb-3">
+                                                                            <i class="bi bi-capsule me-2"></i>
+                                                                            Назначенные лекарства
+                                                                        </h4>
+                                                                        <p class="form-control-static p-3 rounded text-start">
+                                                                            {{ appointment.diagnostic_result.medications }}
+                                                                        </p>
+                                                                    </div>
+                                                                    {% if appointment.diagnostic_result.attachments %}
+                                                                        <div class="mb-3">
+                                                                            <h4 class="text-primary mb-3">
+                                                                                <i class="bi bi-paperclip me-2"></i>
+                                                                                Прикрепленные файлы
+                                                                            </h4>
+                                                                            <p class="form-control-static p-3 rounded text-start">
+                                                                                <a href="{{ appointment.diagnostic_result.attachments.url }}"
+                                                                                   class="btn btn-outline-primary btn-sm"
+                                                                                   target="_blank">
+                                                                                    <i class="bi bi-download me-2"></i>
+                                                                                    {{ appointment.diagnostic_result.attachments.name }}
+                                                                                </a>
+                                                                            </p>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">
+                                                                <i class="bi bi-x-lg me-2"></i>
+                                                                Закрыть
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Нет результатов</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Раздел отзывов -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">{% if user.doctor %}Отзывы обо мне{% else %}Мои отзывы{% endif %}</h5>
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-filter"></i> Фильтр
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="sticky-top bg-body">
+                        <tr>
+                            <th><i class="bi bi-calendar3 me-2"></i>Дата</th>
+                            <th><i class="bi bi-person me-2"></i>{% if user.doctor %}Пациент{% else %}
+                                Врач{% endif %}</th>
+                            <th><i class="bi bi-clipboard2-pulse me-2"></i>Услуга</th>
+                            <th><i class="bi bi-star me-2"></i>Оценка</th>
+                            <th><i class="bi bi-chat-left-text me-2"></i>Отзыв</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if user.doctor %}
+                            {% for review in user.doctor.reviews.all %}
+                                <tr>
+                                    <td>{{ review.date|date:"d.m.Y" }}</td>
+                                    <td>{{ review.user.get_full_name|default:"Анонимный отзыв" }}</td>
+                                    <td>{{ review.service.name }}</td>
+                                    <td>
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.doctor_rating %}
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            {% else %}
+                                                <i class="bi bi-star text-warning"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td class="text-wrap"
+                                        style="max-width: 300px;">{{ review.text|truncatechars:100 }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for review in user.reviews.all %}
+                                <tr>
+                                    <td>{{ review.date|date:"d.m.Y" }}</td>
+                                    <td>{{ review.doctor.user.get_full_name }}</td>
+                                    <td>{{ review.service.name }}</td>
+                                    <td>
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.doctor_rating %}
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            {% else %}
+                                                <i class="bi bi-star text-warning"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ review.text }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}

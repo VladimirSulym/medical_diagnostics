@@ -76,6 +76,7 @@ class DiagnosticResultAdmin(admin.ModelAdmin):
     )
     ordering = ("-created_at",)
 
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
@@ -87,13 +88,9 @@ class ReviewAdmin(admin.ModelAdmin):
         "service_rating",
         "is_anonymous",
     )
-    list_filter = (
-        'doctor',
-        'service',
-        'date'
-    )
+    list_filter = ("doctor", "service", "date")
     search_fields = (
-        'user__user__last_name__icontains',
-        'user__user__first_name__icontains',
+        "user__user__last_name__icontains",
+        "user__user__first_name__icontains",
     )
-    ordering = ('-date',)
+    ordering = ("-date",)
