@@ -127,8 +127,8 @@ jobs:
     - name: Push Docker Compose image
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/web:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/celery:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/celery-beat:latest
+#        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/celery:latest
+#        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/celery-beat:latest
 #        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/web ${{ secrets.DOCKER_HUB_USERNAME }}/web:${{ github.sha }}
 #        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/celery ${{ secrets.DOCKER_HUB_USERNAME }}/celery:${{ github.sha }}
 #        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/celery-beat ${{ secrets.DOCKER_HUB_USERNAME }}/celery-beat:${{ github.sha }}
