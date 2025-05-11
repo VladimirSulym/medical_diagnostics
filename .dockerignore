@@ -1,19 +1,21 @@
-   # Системные файлы
-   .git
-   .gitignore
-   .DS_Store
+# Системные файлы
+.git
+.gitignore
+.DS_Store
 
-   # Среды разработки
-   .idea/
-   .vscode/
-   __pycache__/
-   *.pyc
+# Среды разработки
+.idea/
+.vscode/
+__pycache__/
+*.pyc
 
-   # Виртуальные окружения
-   venv/
-   env/
-   .env
+# Виртуальные окружения
+venv/
+env/
+.env
 
-   # Временные файлы
-   *.log
-   *.tmp
+# Временные файлы
+*.log
+*.tmp
+
+presentation/

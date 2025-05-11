@@ -40,7 +40,12 @@ class HomeView(ListView):
 
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user if not form.cleaned_data["is_anonymous"] else None
+            if not request.user.is_authenticated:
+                review.user = None
+                review.is_anonymous = True
+            else:
+                review.user = request.user if not form.cleaned_data["is_anonymous"] else None
+
             try:
                 review.save()
                 messages.success(request, "Спасибо! Ваш отзыв успешно добавлен.")
