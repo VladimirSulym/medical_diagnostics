@@ -1,6 +1,5 @@
 {% extends "index.html" %}
-{% block title %}QuantumMedical / Главная{% endblock %}
-{% block title_page %}<h4 class="text-info p-0">Сделки</h4>{% endblock %}
+{% block title %}QuantumMedical / Запись на прием{% endblock %}
 
 {% block nav %}
     {% include "nav.html" %}
@@ -103,27 +102,27 @@
 
                     <!-- Другая форма -->
 
-{#                    <div class="mb-4">#}
-{#                        <label for="{{ form.appointment_date.id_for_label }}" class="form-label"><i#}
-{#                                class="bi bi-calendar3 me-2"></i>Дата приема<span class="text-danger">*</span></label>#}
-{#                        {{ form.appointment_date }}#}
-{#                        {% if form.appointment_date.errors %}#}
-{#                            <div class="invalid-feedback d-block">#}
-{#                                {{ form.appointment_date.errors }}#}
-{#                            </div>#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4">#}
-{#                        <label for="{{ form.appointment_time.id_for_label }}" class="form-label"><i#}
-{#                                class="bi bi-clock me-2"></i>Время приема<span class="text-danger">*</span></label>#}
-{#                        {{ form.appointment_time }}#}
-{#                        {% if form.appointment_time.errors %}#}
-{#                            <div class="invalid-feedback d-block">#}
-{#                                {{ form.appointment_time.errors }}#}
-{#                            </div>#}
-{#                        {% endif %}#}
-{#                    </div>#}
+                    {#                    <div class="mb-4">#}
+                    {#                        <label for="{{ form.appointment_date.id_for_label }}" class="form-label"><i#}
+                    {#                                class="bi bi-calendar3 me-2"></i>Дата приема<span class="text-danger">*</span></label>#}
+                    {#                        {{ form.appointment_date }}#}
+                    {#                        {% if form.appointment_date.errors %}#}
+                    {#                            <div class="invalid-feedback d-block">#}
+                    {#                                {{ form.appointment_date.errors }}#}
+                    {#                            </div>#}
+                    {#                        {% endif %}#}
+                    {#                    </div>#}
+                    {##}
+                    {#                    <div class="mb-4">#}
+                    {#                        <label for="{{ form.appointment_time.id_for_label }}" class="form-label"><i#}
+                    {#                                class="bi bi-clock me-2"></i>Время приема<span class="text-danger">*</span></label>#}
+                    {#                        {{ form.appointment_time }}#}
+                    {#                        {% if form.appointment_time.errors %}#}
+                    {#                            <div class="invalid-feedback d-block">#}
+                    {#                                {{ form.appointment_time.errors }}#}
+                    {#                            </div>#}
+                    {#                        {% endif %}#}
+                    {#                    </div>#}
 
 
                     <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow-sm"><i
@@ -177,8 +176,9 @@
                 здоровье.
             </div>
             <div class="d-flex gap-3 justify-content-center lead fw-normal">
-                <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
-                <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                <a class="btn btn-outline-primary" href="{% url 'services:appointment-create' %}">Записаться на
+                    прием</a>
+                <a class="btn btn-outline-primary" href="{% url 'users:about' %}">Узнать больше</a>
             </div>
         </div>
     </div>
@@ -197,8 +197,9 @@
                 здоровье.
             </div>
             <div class="d-flex gap-3 justify-content-center lead fw-normal">
-                <a class="btn btn-outline-primary" href="#">Записаться на прием</a>
-                <a class="btn btn-outline-primary" href="#">Узнать больше</a>
+                <a class="btn btn-outline-primary" href="{% url 'services:appointment-create' %}">Записаться на
+                    прием</a>
+                <a class="btn btn-outline-primary" href="{% url 'users:about' %}">Узнать больше</a>
             </div>
         </div>
     </div>
