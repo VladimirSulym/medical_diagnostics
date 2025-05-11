@@ -41,16 +41,22 @@
     const htmlElement = document.documentElement;
     const icon = darkModeToggle.querySelector('i');
 
+    // Загрузка выбранной темы из localStorage
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlElement.setAttribute('data-bs-theme', savedTheme);
+    icon.classList.remove(savedTheme === 'light' ? 'bi-sun-fill' : 'bi-moon-fill');
+    icon.classList.add(savedTheme === 'light' ? 'bi-moon-fill' : 'bi-sun-fill');
+
     darkModeToggle.addEventListener('click', () => {
-        if (htmlElement.getAttribute('data-bs-theme') === 'light') {
-            htmlElement.setAttribute('data-bs-theme', 'dark');
-            icon.classList.remove('bi-moon-fill');
-            icon.classList.add('bi-sun-fill');
-        } else {
-            htmlElement.setAttribute('data-bs-theme', 'light');
-            icon.classList.remove('bi-sun-fill');
-            icon.classList.add('bi-moon-fill');
-        }
+        const currentTheme = htmlElement.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        htmlElement.setAttribute('data-bs-theme', newTheme);
+        icon.classList.remove(newTheme === 'light' ? 'bi-sun-fill' : 'bi-moon-fill');
+        icon.classList.add(newTheme === 'light' ? 'bi-moon-fill' : 'bi-sun-fill');
+
+        // Сохранение выбранной темы в localStorage
+        localStorage.setItem('theme', newTheme);
     });
 
     function updateSlots(doctorId) {
